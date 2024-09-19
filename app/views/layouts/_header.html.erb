@@ -1,0 +1,50 @@
+<header class="navbar">
+  <div class="container">
+    <div class="logo">
+      <%= link_to 'My Logo', root_path %> <!-- This will act as your logo -->
+    </div>
+
+    <!-- Hamburger Menu Button for Mobile -->
+    <button class="navbar-toggler" id="navbar-toggle">
+      ☰ <!-- Hamburger icon -->
+    </button>
+
+    <!-- Navbar Menu -->
+    <ul class="menu" id="navbar-menu">
+      <li><%= link_to 'Home', '#' %></li>
+      <li><%= link_to 'About', '#' %></li>
+      <li><%= link_to 'Contact', '#' %></li>
+      <li><%= link_to 'Test', '#' %></li>
+      <li class="dropdown">
+        <%= link_to 'More', '#' %>
+        <ul class="dropdown-menu">
+          <li><%= link_to 'BlackSea One Ocean', '#' %></li>
+          <li><%= link_to 'Big Wave', '#' %></li>
+          <li><%= link_to 'KSWC', '#' %></li>
+          <li><%= link_to 'About BlackSea', '#' %></li>
+        </ul>
+      </li>
+    </ul>
+
+    <div class="auth-links">
+      <% if user_signed_in? %>
+        <%= link_to 'Profile', edit_user_registration_path %>
+        <%= link_to 'Logout', destroy_user_session_path, method: :delete %>
+      <% else %>
+        <%= link_to 'Sign In', new_user_session_path %>
+        <%= link_to 'Sign Up', new_user_registration_path %>
+      <% end %>
+    </div>
+  </div>
+</header>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const toggleButton = document.getElementById("navbar-toggle");
+  const menu = document.getElementById("navbar-menu");
+
+  toggleButton.addEventListener("click", function () {
+    menu.classList.toggle("show");
+  });
+});
+</script>
