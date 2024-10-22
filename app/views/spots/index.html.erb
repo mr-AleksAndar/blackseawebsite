@@ -1,0 +1,29 @@
+<h1>Spots</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Wave Type</th>
+      <th>Seabed Type</th>
+      <!-- Add other headers as needed -->
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <%= debug(@spots_data) %>
+    <% @spots.each do |spot| %>
+      <tr>
+        <td><%= spot.name %></td>
+        <td><%= spot.wave_type %></td>
+        <td><%= spot.seabed_type %></td>      
+        <td><%= link_to 'Show', spot %></td>
+        <td><%= link_to 'Edit', edit_spot_path(spot) %></td>
+        <td><%= link_to 'Destroy', spot, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to 'New Spot', new_spot_path %>

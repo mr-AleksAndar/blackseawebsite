@@ -1,0 +1,10 @@
+<h1>Landmarks</h1>
+
+<ul>
+  <% @landmarks.each do |landmark| %>
+    <li>
+      <h2><%= link_to landmark.name, landmark_path(landmark.slug) %></h2>
+      <p><%= landmark.description %></p>
+    </li>
+  <% end %>
+</ul>

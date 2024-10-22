@@ -1,0 +1,6 @@
+<h1><%= @landmark.name %></h1>
+<img src="<%= @landmark.image_url %>" alt="<%= @landmark.name %>">
+<p><%= @landmark.description %></p>
+<p><strong>Type:</strong> <%= @landmark.landmark_type %></p>
+<p><strong>Location:</strong> Latitude: <%= @landmark.latitude %>, Longitude: <%= @landmark.longitude %></p>
+<p><strong>URL:</strong> <%= link_to @landmark.url, @landmark.url, target: "_blank" %></p>

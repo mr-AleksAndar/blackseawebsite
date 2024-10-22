@@ -10,9 +10,39 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_09_18_110931) do
+ActiveRecord::Schema[7.1].define(version: 2024_10_17_102002) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "landmarks", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.float "latitude"
+    t.float "longitude"
+    t.string "landmark_type"
+    t.string "url"
+    t.string "image_url"
+    t.string "slug"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "spots", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.float "latitude"
+    t.float "longitude"
+    t.string "wave_type"
+    t.string "seabed_type"
+    t.string "swell_window"
+    t.integer "consistency"
+    t.string "break_type"
+    t.string "image_url"
+    t.string "slug"
+    t.index ["slug"], name: "index_spots_on_slug", unique: true
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false

@@ -1,1 +1,333 @@
-<h1>Hello</h1>
+<% unless defined?(google) && google.maps %>
+<%= javascript_include_tag "https://maps.googleapis.com/maps/api/js?key=#{Rails.application.credentials.dig(:google_maps, :api_key)}&callback=initMap", defer: true, async: true %>
+<% end %>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+<!-- Header Section -->
+<!-- Header Section -->
+<div class="bg-gray-200 px-6 py-4" style="text-align: center;">
+    <h1 class="text-2xl font-bold text-gray-800">Map of Surf Spots</h1>
+    <p class="text-gray-600">Select a spot to see more information.</p>
+  </div>
+<!-- Styles for Responsive Layout -->
+<style>
+  /* Desktop styles */
+  @media (min-width: 768px) {
+    #map-container {
+      flex-direction: row;
+      height: 700px;
+    }
+    #map-section, #info-section {
+      width: 50%;
+      height: 700px;
+    }
+    #info-section {
+      display: block;
+    }
+  }
+
+  /* Mobile styles */
+  @media (max-width: 767px) {
+    #map-container {
+      flex-direction: column;
+      height: auto;
+    }
+    #map-section {
+      width: 100%;
+      height: 700px;
+    }
+    #info-section {
+      display: none;
+    }
+  }
+</style>
+
+<!-- Container for Map and Info Section -->
+<div id="map-container" style="display: flex; flex-wrap: wrap; width: 95%;margin: 0 auto; border: 1px solid #ccc; border-radius: 10px;overflow: hidden;">
+  <!-- Map Section -->
+  <div id="map-section" style="flex: 1;">
+    <div id="map" style="height: 100%; width: 100%;"></div>
+  </div>
+
+  <!-- Info Section -->
+  <div id="info-section" style="flex: 1; padding: 10px;">
+    <div id="spot-info">
+      <!-- Placeholder content -->
+      <h2>Select a Spot</h2>
+      <p>Click on a marker to see more information about the spot.</p>
+    </div>
+  </div>
+</div>
+
+<!-- JavaScript Code -->
+<script type="text/javascript">
+  document.addEventListener('DOMContentLoaded', function() {
+    console.log('Initializing map...');
+
+    // Fetch spots and landmarks data from the controller
+    const spots = <%= raw @spots.to_json(
+      only: [
+        :id,
+        :name,
+        :description,
+        :latitude,
+        :longitude,
+        :wave_type,
+        :seabed_type,
+        :swell_window,
+        :consistency,
+        :break_type,
+        :image_url,
+        :slug
+      ],
+      methods: [:image_asset_url]
+    ) %>;
+
+    const landmarks = <%= raw @landmarks.to_json(
+      only: [:id, :name, :description, :latitude, :longitude, :slug, :landmark_type, :url, :image_url],
+      methods: [:image_asset_url]
+    ) %>;
+
+    console.log('Spots Data:', spots);
+    console.log('Landmarks Data:', landmarks);
+
+    document.addEventListener('turbo:load', function() {
+      if (document.getElementById('map')) {
+        initMap();
+      }
+    });
+
+    let mapInstance = null;
+
+    function initMap() {
+      if (mapInstance) {
+        return; // Map is already initialized
+      }
+
+      const defaultLocation = spots.length > 0
+        ? { lat: parseFloat(spots[0].latitude), lng: parseFloat(spots[0].longitude) }
+        : { lat: 0, lng: 0 };
+
+      const map = new google.maps.Map(document.getElementById('map'), {
+        center: defaultLocation,
+        zoom: 8,
+        minZoom: 8,
+        maxZoom: 18,
+        mapTypeId: 'satellite',
+      });
+      mapInstance = map;
+
+      let isMobile = window.innerWidth < 768;
+      let openInfoWindow = null;
+
+      const waveIcons = {
+        "Shifting Peaks": '<%= asset_path("spot_images/shiftingpeaks.png") %>', // Example wave type
+        "Righthander": '<%= asset_path("spot_images/righthander.png") %>',
+        "Lefthander": '<%= asset_path("spot_images/lefthander.png") %>',
+        "Aframe": '<%= asset_path("spot_images/Aframe.png") %>',
+        // Add more wave types here with corresponding icons
+      };
+
+      const seabedIcons = {
+        "Sand": '<%= asset_path("spot_images/sand.png") %>', // Example seabed type
+        "Rock": '<%= asset_path("spot_images/rock.png") %>',
+        "Mixed": '<%= asset_path("spot_images/mixed.png") %>',
+        // Add more seabed types here with corresponding icons
+      };
+
+      const customIconUrl = '<%= asset_path("water-waves.png") %>';
+      const customIcon = {
+        url: customIconUrl,
+        scaledSize: new google.maps.Size(40, 40), // Adjust the size here
+        anchor: new google.maps.Point(20, 40),    // Adjust the anchor point based on the size
+      };
+
+      // Define different icons for different types of landmarks
+      const landmarkIcons = {
+        school: '<%= asset_path("landmark_images/school.png") %>',
+        shop: '<%= asset_path("landmark_images/shop.png") %>',
+        shaper: '<%= asset_path("landmark_images/shaper.png") %>'
+      };
+
+      // Add markers for spots
+      spots.forEach(function(spot) {
+        createSpotMarker(spot, customIcon, map, isMobile);
+      });
+
+      // Add markers for landmarks
+      landmarks.forEach(function(landmark) {
+        // Determine which icon to use based on the landmark_type
+        const markerIcon = landmarkIcons[landmark.landmark_type] || landmarkIcons['shop']; // Default to 'shop' icon if type is undefined
+        createLandmarkMarker(landmark, markerIcon, map, isMobile);
+      });
+
+      // Function to create a marker and attach info window for spots
+      function createSpotMarker(spot, icon, map, isMobile) {
+        const marker = new google.maps.Marker({
+          position: { lat: parseFloat(spot.latitude), lng: parseFloat(spot.longitude) },
+          map: map,
+          title: spot.name,
+          icon: icon,
+        });
+
+        let waveTypeIcon = waveIcons[spot.wave_type] || '';
+        let seabedTypeIcon = seabedIcons[spot.seabed_type] || '';
+        let infoContent = '';
+
+        if (isMobile) {
+          // Mobile view: No image, styled text
+          infoContent = `
+            <div class="p-4">
+              <h1 class="text-xl font-bold mb-2">${spot.name}</h1>
+              <p class="text-gray-700 mb-2">${spot.description}</p>
+              <ul class="mb-2">
+                <li class="flex items-center mb-2">
+                  <img src="${waveTypeIcon}" alt="Wave Type" class="inline-block" style="width: 24px; height: 24px;" />
+                  <img src="${seabedTypeIcon}" alt="Seabed Type" class="inline-block ml-2" style="width: 24px; height: 24px;" />
+                </li>
+                <li><strong>Swell Window:</strong> ${spot.swell_window || 'N/A'}</li>
+                <li><strong>Consistency:</strong> ${spot.consistency || 'N/A'}</li>
+                <li><strong>Break Type:</strong> ${spot.break_type || 'N/A'}</li>
+              </ul>
+              <a href="/spots/${spot.slug}" class="inline-flex items-center justify-center w-100 px-6 py-2 bg-blue-100 text-black font-bold rounded-lg shadow-lg border-2 border-blue-300 hover:bg-blue-200 transform transition-transform duration-300 ease-in-out hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-200 focus:ring-opacity-75"
+                style="background-color: #E0F2FE !important; border-color: #7DD3FC !important; color: black !important; padding-top: 10px; padding-bottom: 10px; padding-left: 10px; padding-right: 10px">
+                <i class="fas fa-info-circle mr-2"></i> View More
+              </a>
+            </div>
+          `;
+        } else {
+          // Desktop view: Include image as banner
+          let imageBanner = '';
+          if (spot.image_asset_url) {
+            imageBanner = `<img src="${spot.image_asset_url}" alt="${spot.name}" class="w-full h-40 object-cover mb-4 rounded-t-lg">`;
+          }
+
+          infoContent = `
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+              ${imageBanner}
+              <div class="p-6">
+                <h1 class="text-2xl font-bold mb-4">${spot.name}</h1>
+                <p class="text-gray-700 mb-4">${spot.description}</p>
+                <ul class="mb-4">
+                  <li class="flex items-center">
+                    <strong>Wave Type:</strong>&nbsp;
+                    <span>${spot.wave_type || 'N/A'}</span> 
+                    <img src="${waveTypeIcon}" alt="Wave Type" class="inline-block ml-2" style="width: 24px; height: 24px;" />
+                  </li>
+                  <li class="flex items-center">
+                    <strong>Seabed Type:</strong>&nbsp;
+                    <span>${spot.seabed_type || 'N/A'}</span>
+                    <img src="${seabedTypeIcon}" alt="Seabed Type" class="inline-block ml-2" style="width: 24px; height: 24px;" />
+                  </li>
+                  <li><strong>Swell Window:</strong> ${spot.swell_window || 'N/A'}</li>
+                  <li><strong>Consistency:</strong> ${spot.consistency || 'N/A'}</li>
+                  <li><strong>Break Type:</strong> ${spot.break_type || 'N/A'}</li>
+                </ul>
+                <a href="/spots/${spot.slug}" class="inline-flex items-center justify-center w-100 px-6 py-2 bg-blue-100 text-black font-bold rounded-lg shadow-lg border-2 border-blue-300 hover:bg-blue-200 transform transition-transform duration-300 ease-in-out hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-200 focus:ring-opacity-75"
+                  style="background-color: #E0F2FE !important; border-color: #7DD3FC !important; color: black !important; padding-top: 10px; padding-bottom: 10px;padding-left: 10px;padding-right: 10px">
+                  <i class="fas fa-info-circle mr-2"></i> View More
+                </a>
+              </div>
+            </div>
+          `;
+        }
+
+        const infoWindow = new google.maps.InfoWindow({
+          content: infoContent,
+        });
+
+        marker.addListener('click', function() {
+          if (isMobile) {
+            if (openInfoWindow) {
+              openInfoWindow.close();
+            }
+            infoWindow.open(map, marker);
+            openInfoWindow = infoWindow;
+          } else {
+            document.getElementById('spot-info').innerHTML = infoContent;
+          }
+        });
+      }
+
+      // Function to create a marker and attach info window for landmarks
+      function createLandmarkMarker(landmark, icon, map, isMobile) {
+        const marker = new google.maps.Marker({
+          position: { lat: parseFloat(landmark.latitude), lng: parseFloat(landmark.longitude) },
+          map: map,
+          title: landmark.name,
+          icon: {
+            url: icon,
+            scaledSize: new google.maps.Size(40, 40), // Adjust the size for landmarks
+            anchor: new google.maps.Point(20, 40),
+          },
+        });
+
+        let infoContent = '';
+
+        if (isMobile) {
+          // Mobile view: No image, styled text
+          infoContent = `
+            <div class="p-4">
+              <h1 class="text-xl font-bold mb-2">${landmark.name}</h1>
+              <p class="text-gray-700 mb-2">${landmark.description}</p>
+            <a href="${landmark.url}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center w-100 px-6 py-2 bg-blue-100 text-black font-bold rounded-lg shadow-lg border-2 border-blue-300 hover:bg-blue-200 transform transition-transform duration-300 ease-in-out hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-200 focus:ring-opacity-75"
+    style="background-color: #E0F2FE !important; border-color: #7DD3FC !important; color: black !important; padding-top: 10px; padding-bottom: 10px; padding-left: 10px; padding-right: 10px">
+    <i class="fas fa-info-circle mr-2"></i> View More
+</a>
+            </div>
+          `;
+        } else {
+          // Desktop view: Include image as banner
+          let imageBanner = '';
+          if (landmark.image_url) {
+            imageBanner = `<img src="${landmark.image_asset_url}" alt="${landmark.name}" class="w-full h-40 object-cover mb-4 rounded-t-lg">`;
+          }
+
+          infoContent = `
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+              ${imageBanner}
+              <div class="p-6">
+                <h1 class="text-2xl font-bold mb-4">${landmark.name}</h1>
+                <p class="text-gray-700 mb-4">${landmark.description}</p>
+               <a href="${landmark.url}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center w-100 px-6 py-2 bg-blue-100 text-black font-bold rounded-lg shadow-lg border-2 border-blue-300 hover:bg-blue-200 transform transition-transform duration-300 ease-in-out hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-200 focus:ring-opacity-75"
+    style="background-color: #E0F2FE !important; border-color: #7DD3FC !important; color: black !important; padding-top: 10px; padding-bottom: 10px;padding-left: 10px;padding-right: 10px">
+    <i class="fas fa-info-circle mr-2"></i> View More
+</a>
+              </div>
+            </div>
+          `;
+        }
+
+        const infoWindow = new google.maps.InfoWindow({
+          content: infoContent,
+        });
+
+        marker.addListener('click', function() {
+          if (isMobile) {
+            if (openInfoWindow) {
+              openInfoWindow.close();
+            }
+            infoWindow.open(map, marker);
+            openInfoWindow = infoWindow;
+          } else {
+            document.getElementById('spot-info').innerHTML = infoContent;
+          }
+        });
+      }
+
+      // Update 'isMobile' when the window is resized
+      window.addEventListener('resize', function() {
+        isMobile = window.innerWidth < 768;
+        toggleInfoSection(isMobile);
+      });
+
+      function toggleInfoSection(isMobile) {
+        if (isMobile) {
+          document.getElementById('info-section').style.display = 'none';
+        } else {
+          document.getElementById('info-section').style.display = 'block';
+        }
+      }
+    }
+  });
+</script>

@@ -8,7 +8,8 @@
     "nodemon": "^3.1.5",
     "postcss": "^8.4.47",
     "postcss-cli": "^11.0.0",
-    "sass": "^1.79.1"
+    "sass": "^1.79.1",
+    "tailwindcss": "^3.4.13"
   },
   "scripts": {
     "build:css:compile": "sass ./app/assets/stylesheets/application.scss:./app/assets/builds/application.css --no-source-map --load-path=node_modules",

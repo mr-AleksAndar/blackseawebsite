@@ -1,50 +1,100 @@
-<header class="navbar">
-  <div class="container">
-    <div class="logo">
-      <%= link_to 'My Logo', root_path %> <!-- This will act as your logo -->
-    </div>
+<header class="bg-white shadow-md">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center py-4 md:justify-start md:space-x-10">
+      
+      <!-- Logo -->
+      <div class="flex justify-start lg:w-0 lg:flex-1">
+        <%= link_to 'My Logo', root_path, class: "text-2xl font-bold text-primary", data: { turbo: false } %>
+      </div>
 
-    <!-- Hamburger Menu Button for Mobile -->
-    <button class="navbar-toggler" id="navbar-toggle">
-      ☰ <!-- Hamburger icon -->
-    </button>
+      <!-- Mobile menu button -->
+      <div class="-mr-2 -my-2 md:hidden">
+        <button
+          type="button"
+          class="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary"
+          id="navbar-toggle"
+        >
+          <span class="sr-only">Open menu</span>
+          ☰ <!-- Replace with SVG icon if preferred -->
+        </button>
+      </div>
 
-    <!-- Navbar Menu -->
-    <ul class="menu" id="navbar-menu">
-      <li><%= link_to 'Home', '#' %></li>
-      <li><%= link_to 'About', '#' %></li>
-      <li><%= link_to 'Contact', '#' %></li>
-      <li><%= link_to 'Test', '#' %></li>
-      <li class="dropdown">
-        <%= link_to 'More', '#' %>
-        <ul class="dropdown-menu">
-          <li><%= link_to 'BlackSea One Ocean', '#' %></li>
-          <li><%= link_to 'Big Wave', '#' %></li>
-          <li><%= link_to 'KSWC', '#' %></li>
-          <li><%= link_to 'About BlackSea', '#' %></li>
-        </ul>
-      </li>
-    </ul>
+      <!-- Desktop menu -->
+      <nav class="hidden md:flex space-x-10" id="navbar-menu">
+        <%= link_to 'Map', root_path, class: 'text-base font-medium text-gray-500 hover:text-gray-900', data: { turbo: false }  %>
+        <%= link_to 'Club', '#', class: 'text-base font-medium text-gray-500 hover:text-gray-900' %>
 
-    <div class="auth-links">
-      <% if user_signed_in? %>
-        <%= link_to 'Profile', edit_user_registration_path %>
-        <%= link_to 'Logout', destroy_user_session_path, method: :delete %>
-      <% else %>
-        <%= link_to 'Sign In', new_user_session_path %>
-        <%= link_to 'Sign Up', new_user_registration_path %>
-      <% end %>
+        <!--
+        <button id="dropdownHoverSurfboards" data-dropdown-toggle="dropdownSurfboards" data-dropdown-trigger="hover" class="text-gray-500 inline-flex items-center rounded-md bg-white text-base font-medium hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+          Surfboards
+          <svg class="ml-2 h-5 w-5 text-gray-400 group-hover:text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 30 30" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+        <div id="dropdownSurfboards" class="absolute left-0 mt-1 w-72 bg-white border border-gray-200 rounded-lg shadow-lg z-10 hidden divide-y divide-gray-100">
+          <ul class="py-2 px-3">
+            <li>
+              <%= link_to 'Euxine', euxine_path, class: "-m-3 flex items-start rounded-lg p-3 hover:bg-gray-50" %>
+            </li>
+          </ul>
+        </div>
+
+        <button id="dropdownHoverMore" data-dropdown-toggle="dropdownMore" data-dropdown-trigger="hover" class="text-gray-500 inline-flex items-center rounded-md bg-white text-base font-medium hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+          More
+          <svg class="ml-2 h-5 w-5 text-gray-400 group-hover:text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 30 30" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+
+        <div id="dropdownMore" class="absolute left-0 mt-1 w-72 bg-white border border-gray-200 rounded-lg shadow-lg z-10 hidden divide-y divide-gray-100">
+          <ul class="py-2 px-3">
+            <li>
+              <%= link_to 'BlackSea One Ocean', '#', class: "-m-3 flex items-start rounded-lg p-3 hover:bg-gray-50" %>
+            </li>
+            <li>
+              <%= link_to 'Big Wave', '#', class: "-m-3 flex items-start rounded-lg p-3 hover:bg-gray-50" %>
+            </li>
+            <li>
+              <%= link_to 'KSWC', '#', class: "-m-3 flex items-start rounded-lg p-3 hover:bg-gray-50" %>
+            </li>
+            <li>
+              <%= link_to 'About BlackSea', '#', class: "-m-3 flex items-start rounded-lg p-3 hover:bg-gray-50" %>
+            </li>
+          </ul>
+        </div> -->
+
+        <%= link_to 'Contact', '#', class: 'text-base font-medium text-gray-500 hover:text-gray-900' %>
+      </nav>
+
+      <!-- Auth Links 
+      <div class="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
+        <% if user_signed_in? %>
+          <%= link_to 'Profile', edit_user_registration_path, class: "ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-primary hover:bg-secondary" %>
+          <%= link_to 'Logout', destroy_user_session_path, method: :delete, class: "ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-primary hover:bg-secondary" %>
+        <% else %>
+          <%= link_to 'Sign In', new_user_session_path, class: "ml-8 whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900" %>
+          <%= link_to 'Sign Up', new_user_registration_path, class: "ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-primary hover:bg-secondary" %>
+        <% end %>
+      </div>
+    </div> -->
+  </div>
+
+  <!-- Mobile menu (if open) -->
+  <div class="md:hidden" id="mobile-menu" style="display: none;">
+    <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+      <%= link_to 'Home', '#', class: 'block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50' %>
+      <%= link_to 'Club', '#', class: 'block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50' %>
+    <!--<%= link_to 'Surfboards', '#', class: 'block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50' %>
+      <%= link_to 'Euxine', euxine_path, class: 'block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50' %>
+      <%= link_to 'More', '#', class: 'block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50' %>
+      <ul>
+        <%= link_to 'BlackSea One Ocean', '#', class: "block px-3 py-2 text-gray-500 hover:text-gray-700" %>
+        <%= link_to 'Big Wave', '#', class: "block px-3 py-2 text-gray-500 hover:text-gray-700" %>
+        <%= link_to 'KSWC', '#', class: "block px-3 py-2 text-gray-500 hover:text-gray-700" %>
+        <%= link_to 'About BlackSea', '#', class: "block px-3 py-2 text-gray-500 hover:text-gray-700" %>
+      </ul>
+    -->
     </div>
   </div>
 </header>
 
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-  const toggleButton = document.getElementById("navbar-toggle");
-  const menu = document.getElementById("navbar-menu");
-
-  toggleButton.addEventListener("click", function () {
-    menu.classList.toggle("show");
-  });
-});
-</script>
