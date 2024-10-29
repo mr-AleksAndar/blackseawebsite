@@ -1,13 +1,11 @@
-<% unless defined?(google) && google.maps %>
-<%= javascript_include_tag "https://maps.googleapis.com/maps/api/js?key=#{Rails.application.credentials.dig(:google_maps, :api_key)}&callback=initMap", defer: true, async: true %>
-<% end %>
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 
 <!-- Header Section -->
 <!-- Header Section -->
 <div class="bg-gray-200 px-6 py-4" style="text-align: center;">
-    <h1 class="text-2xl font-bold text-gray-800">Map of Surf Spots</h1>
-    <p class="text-gray-600">Select a spot to see more information.</p>
+    <h1 class="text-2xl font-bold text-gray-800">Карта на сърф спотовете в България</h1>
+    <p class="text-gray-600">Натиснете върху маркер, за да разгледате подробности.</p>
   </div>
 <!-- Styles for Responsive Layout -->
 <style>
@@ -28,10 +26,6 @@
 
   /* Mobile styles */
   @media (max-width: 767px) {
-    #map-container {
-      flex-direction: column;
-      height: auto;
-    }
     #map-section {
       width: 100%;
       height: 700px;
@@ -99,14 +93,13 @@
 
     let mapInstance = null;
 
-    function initMap() {
+    window.initMap = function() {
       if (mapInstance) {
         return; // Map is already initialized
       }
 
-      const defaultLocation = spots.length > 0
-        ? { lat: parseFloat(spots[0].latitude), lng: parseFloat(spots[0].longitude) }
-        : { lat: 0, lng: 0 };
+      // Set default location (latitude and longitude for Varna, Bulgaria)
+      const defaultLocation = { lat: 43.2141, lng: 27.9147 };
 
       const map = new google.maps.Map(document.getElementById('map'), {
         center: defaultLocation,
@@ -114,6 +107,7 @@
         minZoom: 8,
         maxZoom: 18,
         mapTypeId: 'satellite',
+        gestureHandling: 'greedy',
       });
       mapInstance = map;
 
@@ -177,29 +171,32 @@
         if (isMobile) {
           // Mobile view: No image, styled text
           infoContent = `
+              <div style="padding: 0; margin: 0;">
+            ${spot.image_asset_url ? `<img src="${spot.image_asset_url}" alt="${spot.name}" style="width: 100%; height: auto; display: block; border-radius: 10px 10px 0 0;">` : ''}
             <div class="p-4">
-              <h1 class="text-xl font-bold mb-2">${spot.name}</h1>
-              <p class="text-gray-700 mb-2">${spot.description}</p>
-              <ul class="mb-2">
-                <li class="flex items-center mb-2">
-                  <img src="${waveTypeIcon}" alt="Wave Type" class="inline-block" style="width: 24px; height: 24px;" />
-                  <img src="${seabedTypeIcon}" alt="Seabed Type" class="inline-block ml-2" style="width: 24px; height: 24px;" />
-                </li>
-                <li><strong>Swell Window:</strong> ${spot.swell_window || 'N/A'}</li>
-                <li><strong>Consistency:</strong> ${spot.consistency || 'N/A'}</li>
-                <li><strong>Break Type:</strong> ${spot.break_type || 'N/A'}</li>
-              </ul>
-              <a href="/spots/${spot.slug}" class="inline-flex items-center justify-center w-100 px-6 py-2 bg-blue-100 text-black font-bold rounded-lg shadow-lg border-2 border-blue-300 hover:bg-blue-200 transform transition-transform duration-300 ease-in-out hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-200 focus:ring-opacity-75"
-                style="background-color: #E0F2FE !important; border-color: #7DD3FC !important; color: black !important; padding-top: 10px; padding-bottom: 10px; padding-left: 10px; padding-right: 10px">
-                <i class="fas fa-info-circle mr-2"></i> View More
-              </a>
+                <h1 class="text-xl font-bold mb-2">${spot.name}</h1>
+                <p class="text-gray-700 mb-2">${spot.description}</p>
+                <ul class="mb-2">
+                    <li class="flex items-center mb-2">
+                        <img src="${waveTypeIcon}" alt="Wave Type" class="inline-block" style="width: 24px; height: 24px;" />
+                        <img src="${seabedTypeIcon}" alt="Seabed Type" class="inline-block ml-2" style="width: 24px; height: 24px;" />
+                    </li>
+                    <li><strong>Swell Window:</strong> ${spot.swell_window || 'N/A'}</li>
+                    <li><strong>Consistency:</strong> ${spot.consistency || 'N/A'}</li>
+                    <li><strong>Break Type:</strong> ${spot.break_type || 'N/A'}</li>
+                </ul>
+                <a href="/spots/${spot.slug}" class="inline-flex items-center justify-center w-full px-6 py-2 bg-blue-100 text-black font-bold rounded-lg shadow-lg border-2 border-blue-300 hover:bg-blue-200 transform transition-transform duration-300 ease-in-out hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-200 focus:ring-opacity-75"
+                    style="background-color: #E0F2FE !important; border-color: #7DD3FC !important; color: black !important;">
+                    <i class="fas fa-info-circle mr-2"></i> View More
+                </a>
             </div>
-          `;
+        </div>
+    `;
         } else {
           // Desktop view: Include image as banner
           let imageBanner = '';
           if (spot.image_asset_url) {
-            imageBanner = `<img src="${spot.image_asset_url}" alt="${spot.name}" class="w-full h-40 object-cover mb-4 rounded-t-lg">`;
+            imageBanner = `<img src="${spot.image_asset_url}" alt="${spot.name}" class="w-full h-64 object-cover mb-4 rounded-t-lg">`;
           }
 
           infoContent = `
@@ -267,20 +264,23 @@
         if (isMobile) {
           // Mobile view: No image, styled text
           infoContent = `
-            <div class="p-4">
-              <h1 class="text-xl font-bold mb-2">${landmark.name}</h1>
-              <p class="text-gray-700 mb-2">${landmark.description}</p>
-            <a href="${landmark.url}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center w-100 px-6 py-2 bg-blue-100 text-black font-bold rounded-lg shadow-lg border-2 border-blue-300 hover:bg-blue-200 transform transition-transform duration-300 ease-in-out hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-200 focus:ring-opacity-75"
-    style="background-color: #E0F2FE !important; border-color: #7DD3FC !important; color: black !important; padding-top: 10px; padding-bottom: 10px; padding-left: 10px; padding-right: 10px">
-    <i class="fas fa-info-circle mr-2"></i> View More
-</a>
+            <div style="padding: 0; margin: 0;">
+                ${landmark.image_asset_url ? `<img src="${landmark.image_asset_url}" alt="${landmark.name}" style="width: 100%; height: auto; display: block; border-radius: 10px 10px 0 0;">` : ''}
+                <div class="p-4">
+                    <h1 class="text-xl font-bold mb-2">${landmark.name}</h1>
+                    <p class="text-gray-700 mb-2">${landmark.description}</p>
+                    <a href="${landmark.url}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center w-full px-6 py-2 bg-blue-100 text-black font-bold rounded-lg shadow-lg border-2 border-blue-300 hover:bg-blue-200 transform transition-transform duration-300 ease-in-out hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-200 focus:ring-opacity-75"
+                        style="background-color: #E0F2FE !important; border-color: #7DD3FC !important; color: black !important;">
+                        <i class="fas fa-info-circle mr-2"></i> View More
+                    </a>
+                </div>
             </div>
-          `;
+        `;
         } else {
           // Desktop view: Include image as banner
           let imageBanner = '';
           if (landmark.image_url) {
-            imageBanner = `<img src="${landmark.image_asset_url}" alt="${landmark.name}" class="w-full h-40 object-cover mb-4 rounded-t-lg">`;
+            imageBanner = `<img src="${landmark.image_asset_url}" alt="${landmark.name}" class="w-full h-64 object-cover mb-4 rounded-t-lg">`;
           }
 
           infoContent = `
@@ -331,3 +331,7 @@
     }
   });
 </script>
+
+<% unless defined?(google) && google.maps %>
+<%= javascript_include_tag "https://maps.googleapis.com/maps/api/js?key=#{Rails.application.credentials.dig(:google_maps, :api_key)}&callback=initMap"%>
+<% end %>

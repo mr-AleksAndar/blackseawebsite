@@ -17,7 +17,6 @@ class LandmarksController < ApplicationController
   def show
     @landmark = Landmark.find_by(slug: params[:id])
   end
-end
 
 private
 

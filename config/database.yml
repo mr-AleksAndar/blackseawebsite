@@ -15,8 +15,11 @@ test:
   database: blackseawebsite_test
 
 production:
-  <<: *default
-  database: blackseawebsite_production
-  username: <%= ENV['DATABASE_USERNAME'] %>
-  password: <%= ENV['DATABASE_PASSWORD'] %>
-  host: <%= ENV['DATABASE_HOST'] %>
+  adapter: postgresql
+  encoding: unicode
+  database: blacksea_db
+  pool: 5
+  username: blacksea_user
+  password: blacksea_password
+  host: 127.0.0.1
+  port: 5432

@@ -7,4 +7,7 @@
 
     def euxine
     end
+
+    def club
+    end
   end

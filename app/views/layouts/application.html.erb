@@ -1,12 +1,43 @@
 <!DOCTYPE html>
-<html>
+<html lang="bg">
   <head>
-    <title>Blackseawebsite</title>
+    <title>Surf Black Sea</title>
+    <meta http-equiv="Content-Language" content="bg">
+    <meta name="description" content="Explore the best surf spots on the Black Sea coast. Stay updated with the latest surf conditions, locations, and tips. Surf Black Sea offers a guide for both beginners and pros!">
+    <meta name="keywords" content="surf, Black Sea, Bulgaria surf, surf spots, surfing guide, waves, surfing conditions">
+    <meta name="author" content="Surf Black Sea">
     <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <meta property="og:title" content="Surf Black Sea - Discover the Best Surf Spots in Bulgaria">
+    <meta property="og:description" content="Find the perfect surf spot along the Black Sea coast. Surf Black Sea provides real-time surf conditions and detailed spot guides.">
+    <meta property="og:image" content="<%= asset_path('club_banner.jpg') %>"> 
+    <meta property="og:url" content="<%= request.original_url %>">
+    <meta property="og:type" content="website">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Surf Black Sea - Discover Surf Spots">
+    <meta name="twitter:description" content="Explore and surf the Black Sea with our complete guide to surf spots in Bulgaria.">
+    <meta name="twitter:image" content="<%= asset_path('club_banner.jpg') %>">
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EJ6C9PDJVJ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-EJ6C9PDJVJ');
+    </script>
+
+    <%= yield :head %>
+    
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+    <%= favicon_link_tag asset_path('water-waves.png'), rel: 'icon', type: 'image/png', sizes: '32x32' %>
+    <%= favicon_link_tag asset_path('water-waves.png'), rel: 'icon', type: 'image/png', sizes: '16x16' %>
+    <%= favicon_link_tag asset_path('water-waves.png'), rel: 'apple-touch-icon', sizes: '180x180' %>
     <script src="https://cdn.jsdelivr.net/npm/flowbite@latest/dist/flowbite.min.js"></script>
-    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
     <%= javascript_include_tag "navbar", "data-turbo-track": "reload" %>
   </head>

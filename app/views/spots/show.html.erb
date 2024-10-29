@@ -1,2 +1,41 @@
-<h1>Spots#show</h1>
-<p>Find me in app/views/spots/show.html.erb</p>
+<% content_for :head do %>
+  <title><%= @spot.name %> - Surf Black Sea</title>
+  <meta name="description" content="<%= @spot.description %> - Explore surf spots like <%= @spot.name %> with unique wave types and beautiful seabed views.">
+  <meta name="keywords" content="<%= @spot.name %>, Surf Black Sea, surfing, surf spot, <%= @spot.wave_type %>, <%= @spot.seabed_type %>, Black Sea">
+  
+  <!-- Open Graph for social sharing -->
+  <meta property="og:title" content="<%= @spot.name %> - Surf Black Sea">
+  <meta property="og:description" content="<%= @spot.description %>">
+  <meta property="og:image" content="<%= asset_url(@spot.image_asset_url) %>">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="<%= request.original_url %>">
+  
+  <!-- Twitter Card for social sharing -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="<%= @spot.name %> - Surf Black Sea">
+  <meta name="twitter:description" content="<%= @spot.description %>">
+  <meta name="twitter:image" content="<%= asset_url(@spot.image_asset_url) %>">
+<% end %>
+
+<div class="relative bg-cover bg-center h-[500px]">
+    <%= image_tag @spot.image_asset_url, class: "w-full h-full object-cover" %>
+    <div class="absolute inset-0 flex items-end justify-start">
+      <h1 class="text-white text-4xl font-bold p-6"><%= @spot.name %></h1>
+    </div>
+  </div>
+
+  <div class="container mx-auto px-6 py-8">
+    <div class="text-left">
+      <p class="text-lg text-gray-700 mb-4"><strong>Description:</strong> <%= @spot.description %></p>
+      <p class="text-lg text-gray-700 mb-4"><strong>Wave Type:</strong> <%= @spot.wave_type %></p>
+      <p class="text-lg text-gray-700 mb-4"><strong>Seabed Type:</strong> <%= @spot.seabed_type %></p>
+      <p class="text-lg text-gray-700 mb-4"><strong>Swell Window:</strong> <%= @spot.swell_window %></p>
+      <p class="text-lg text-gray-700 mb-4"><strong>Consistency:</strong> <%= @spot.consistency %></p>
+      <p class="text-lg text-gray-700 mb-4"><strong>Break Type:</strong> <%= @spot.break_type %></p>
+    </div>
+  </div>
+  
+  <!-- Back Button -->
+  <div class="container mx-auto px-6 py-8 text-center">
+    <%= link_to 'Back to Map', root_path, class: "px-6 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 transition duration-300", data: { turbo: false } %>
+  </div>

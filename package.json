@@ -9,10 +9,12 @@
     "postcss": "^8.4.47",
     "postcss-cli": "^11.0.0",
     "sass": "^1.79.1",
-    "tailwindcss": "^3.4.13"
+    "tailwindcss": "^3.4.14"
   },
   "scripts": {
-    "build:css:compile": "sass ./app/assets/stylesheets/application.scss:./app/assets/builds/application.css --no-source-map --load-path=node_modules",
+    "build":"yarn build:css",
+    "build:css": "tailwindcss build app/assets/stylesheets/application.tailwind.css -o app/assets/builds/application.css",
+    "build:css:compile": "postcss ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css",
     "build:css:prefix": "postcss ./app/assets/builds/application.css --replace --use autoprefixer",
     "build:css": "yarn build:css:compile && yarn build:css:prefix",
     "watch:css": "nodemon --watch ./app/assets/stylesheets/ --ext scss --exec \"yarn build:css\""
