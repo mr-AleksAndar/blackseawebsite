@@ -53,6 +53,22 @@
   </div>
 </div>
 
+<!-- Filter and List Section -->
+<div class="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
+  <!-- Filter Buttons with Wrapping -->
+  <div class="flex flex-wrap justify-center gap-3 mb-6 px-2">
+    <button id="allBtn" class="filter-btn bg-blue-500 text-white font-semibold py-2 px-4 rounded-full hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-300 transition">Всички</button>
+    <button id="spotsBtn" class="filter-btn bg-blue-500 text-white font-semibold py-2 px-4 rounded-full hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-300 transition">Спотове</button>
+    <button id="schoolBtn" class="filter-btn bg-blue-500 text-white font-semibold py-2 px-4 rounded-full hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-300 transition">Сърф училища</button>
+    <button id="shopBtn" class="filter-btn bg-blue-500 text-white font-semibold py-2 px-4 rounded-full hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-300 transition">Магазини</button>
+    <button id="shaperBtn" class="filter-btn bg-blue-500 text-white font-semibold py-2 px-4 rounded-full hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-300 transition">Шейпъри</button>
+  </div>
+
+
+  <!-- List Container -->
+  <div id="list-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+</div>
+
 <!-- JavaScript Code -->
 <script type="text/javascript">
   document.addEventListener('DOMContentLoaded', function() {
@@ -154,7 +170,7 @@
         const markerIcon = landmarkIcons[landmark.landmark_type] || landmarkIcons['shop']; // Default to 'shop' icon if type is undefined
         createLandmarkMarker(landmark, markerIcon, map, isMobile);
       });
-
+      
       // Function to create a marker and attach info window for spots
       function createSpotMarker(spot, icon, map, isMobile) {
         const marker = new google.maps.Marker({
@@ -329,8 +345,101 @@
         }
       }
     }
+
+  // Define container for list display
+  const listContainer = document.getElementById('list-container');
+
+// Define waveIcons and seabedIcons with the correct paths to the icons
+const waveIcons = {
+  "Shifting Peaks": '<%= asset_path("spot_images/shiftingpeaks.png") %>',
+  "Righthander": '<%= asset_path("spot_images/righthander.png") %>',
+  "Lefthander": '<%= asset_path("spot_images/lefthander.png") %>',
+  "Aframe": '<%= asset_path("spot_images/Aframe.png") %>',
+  // Add more wave types as needed
+};
+
+const seabedIcons = {
+  "Sand": '<%= asset_path("spot_images/sand.png") %>',
+  "Rock": '<%= asset_path("spot_images/rock.png") %>',
+  "Mixed": '<%= asset_path("spot_images/mixed.png") %>',
+  // Add more seabed types as needed
+};
+
+// Function to render list items
+function renderList(items) {
+  // Clear previous content
+  listContainer.innerHTML = '';
+
+  items.forEach(item => {
+    const itemCard = document.createElement('div');
+    itemCard.className = 'bg-white rounded-lg shadow-md overflow-hidden flex flex-col h-full';
+
+    // Image for the banner
+    const imageBanner = item.image_asset_url ? `<img src="${item.image_asset_url}" alt="${item.name}" class="w-full h-64 object-cover mb-4 rounded-t-lg">` : '';
+
+    // Get the correct icons for wave type and seabed type
+    const waveTypeIcon = waveIcons[item.wave_type] || '';
+    const seabedTypeIcon = seabedIcons[item.seabed_type] || '';
+
+    // Debugging logs
+    console.log("Rendering item:", item.name);
+    console.log("Wave Type Icon:", waveTypeIcon);
+    console.log("Seabed Type Icon:", seabedTypeIcon);
+
+    // Display the icons instead of text
+    const typeSpecificInfo = `
+      <div class="flex items-center space-x-2">
+        ${waveTypeIcon ? `<img src="${waveTypeIcon}" alt="Wave Type" class="inline-block" style="width: 24px; height: 24px;" />` : ''}
+        ${seabedTypeIcon ? `<img src="${seabedTypeIcon}" alt="Seabed Type" class="inline-block ml-2" style="width: 24px; height: 24px;" />` : ''}
+      </div>`;
+
+    // URL and target attributes for the button
+    const itemUrl = item.url || `/spots/${item.slug}`;
+    const targetAttr = item.url ? '_blank' : '_self';
+
+    // Card HTML content
+    itemCard.innerHTML = `
+  ${imageBanner}
+  <div class="flex flex-col justify-between h-full"> 
+    <div class="p-6 flex-grow">
+      <h2 class="text-2xl font-bold mb-2">${item.name}</h2>
+      ${typeSpecificInfo} <!-- Moved here, directly under the title -->
+      <p class="text-gray-700 mb-4">${item.description}</p>
+    </div>
+    <div class="p-6 pt-0 mt-auto">
+      <a href="${itemUrl}" target="${targetAttr}" 
+         class="inline-flex items-center justify-center w-full px-6 py-2 bg-blue-100 text-black font-bold rounded-lg shadow-lg border-2 border-blue-300 hover:bg-blue-200 transform transition-transform duration-300 ease-in-out hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-200 focus:ring-opacity-75">
+        <i class="fas fa-info-circle mr-2"></i> Вижте още
+      </a>
+    </div>
+  </div>`;
+
+    // Append the card to the list container
+    listContainer.appendChild(itemCard);
   });
+}
+
+  // Render All Items by Default
+  renderList([...spots, ...landmarks]);
+
+  // Filter Buttons
+  const allBtn = document.getElementById('allBtn');
+  const spotsBtn = document.getElementById('spotsBtn');
+  const schoolBtn = document.getElementById('schoolBtn');
+  const shopBtn = document.getElementById('shopBtn');
+  const shaperBtn = document.getElementById('shaperBtn');
+
+  // Button Event Listeners
+  allBtn.addEventListener('click', () => renderList([...spots, ...landmarks]));
+  spotsBtn.addEventListener('click', () => renderList(spots));
+  schoolBtn.addEventListener('click', () => renderList(landmarks.filter(landmark => landmark.landmark_type === 'school')));
+  shopBtn.addEventListener('click', () => renderList(landmarks.filter(landmark => landmark.landmark_type === 'shop')));
+  shaperBtn.addEventListener('click', () => renderList(landmarks.filter(landmark => landmark.landmark_type === 'shaper')));
+});
 </script>
+
+
+
 
 <% unless defined?(google) && google.maps %>
 <%= javascript_include_tag "https://maps.googleapis.com/maps/api/js?key=#{Rails.application.credentials.dig(:google_maps, :api_key)}&callback=initMap"%>
