@@ -5,8 +5,6 @@
       @landmarks = Landmark.all
     end
 
-    def euxine
-    end
 
     def club
     end

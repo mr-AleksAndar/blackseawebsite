@@ -8,7 +8,7 @@
   <!-- Open Graph Meta Tags -->
   <meta property="og:title" content="Wake & Surf Club Varna - The Ultimate Destination for Water Lovers">
   <meta property="og:description" content="Explore the best of the Black Sea at Wake & Surf Club Varna, a paradise for surfers and wakeboarders alike.">
-  <meta property="og:image" content="<%= asset_path('club_banner.jpg') %>">
+  <meta property="og:image" content="<%= asset_path('club_banner.webp') %>">
   <meta property="og:url" content="<%= request.original_url %>">
   <meta property="og:type" content="website">
   
@@ -16,11 +16,11 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Join Wake & Surf Club Varna">
   <meta name="twitter:description" content="Be part of a passionate watersport community at the Black Sea’s premier surf club.">
-  <meta name="twitter:image" content="<%= asset_path('club_banner.jpg') %>">
+  <meta name="twitter:image" content="<%= asset_path('club_banner.webp') %>">
 <% end %>
 
 <div class="relative w-full bg-cover bg-center h-48 sm:h-64 md:h-80 lg:h-96 xl:h-[500px] 2xl:h-[700px] 3xl:h-[900px]" 
-     style="background-image: url('<%= asset_path("club_banner.jpg") %>');">
+     style="background-image: url('<%= asset_path("club_banner.webp") %>');">
 </div>
   <!-- Introduction Section -->
   <div class="container mx-auto px-6 py-8">
@@ -44,6 +44,18 @@
     </a>
   </div>
   
+    <!-- Support & Donation Section -->
+<div class="container mx-auto px-6 py-8 bg-green-100 rounded-lg text-center shadow-md my-8">
+  <h3 class="text-2xl font-bold mb-4">Подкрепете Нашия Клуб</h3>
+  <p class="text-lg text-gray-700 mb-6">
+    Ако желаете да подкрепите или дарите за Уейк & Сърф Клуб Варна, ние ще сме много благодарни! Вашата помощ ни дава възможност да продължим да развиваме водните спортове в Черно море.
+  </p>
+  <p class="text-lg font-semibold text-gray-800">
+    Титуляр: Уейк и Сърф Клуб Варна <br>
+    Банкова сметка: <span class="font-mono text-blue-700">BG07INTF40012038239476</span>
+  </p>
+</div>
+
   <!-- Social Media Section -->
   <div class="container mx-auto px-6 py-8 text-center">
     <h3 class="text-2xl font-bold mb-4">Последвайте ни!</h3>
@@ -83,7 +95,6 @@
       </div>
     </div>
   </div>
-  
   
   <!-- Footer Section -->
   <footer class="bg-gray-800 text-white py-6">

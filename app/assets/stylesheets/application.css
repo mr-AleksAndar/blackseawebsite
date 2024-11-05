@@ -25,6 +25,34 @@ html, body {
     justify-content: space-between;
   }
   
+
+  .bg-blue-500 {
+    background-color: #3b82f6; /* example color */
+  }
+  
+  .bg-gray-300 {
+    background-color: #d1d5db; /* example color */
+  }
+  
+  .w-4, .h-4 {
+    width: 1rem; /* 16px */
+    height: 1rem; /* 16px */
+  }
+  
+  .rounded-full {
+    border-radius: 9999px;
+  }
+  
+  /* Styles for the footer */
+.footer {
+  background-color: #f8f9fa;
+  padding: 20px 0;
+}
+
+.footer .container {
+  max-width: 960px;
+  margin: 0 auto;
+}
   /* Wrapping on Small Screens */
   @media (max-width: 640px) {
     .flex-wrap {

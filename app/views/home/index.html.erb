@@ -1,10 +1,9 @@
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
 
 <!-- Header Section -->
-<!-- Header Section -->
 <div class="bg-gray-200 px-6 py-4" style="text-align: center;">
-    <h1 class="text-2xl font-bold text-gray-800">Карта на сърф спотовете в България</h1>
+    <h1 class="text-2xl font-bold text-gray-800">Карта на сърфиста!</h1>
     <p class="text-gray-600">Натиснете върху маркер, за да разгледате подробности.</p>
   </div>
 <!-- Styles for Responsive Layout -->
@@ -28,9 +27,15 @@
   @media (max-width: 767px) {
     #map-section {
       width: 100%;
-      height: 700px;
+      height: 500px;
     }
     #info-section {
+      display: none;
+    }
+    #list-container {
+      display: none;
+    }
+    #filter-container {
       display: none;
     }
   }
@@ -43,18 +48,80 @@
     <div id="map" style="height: 100%; width: 100%;"></div>
   </div>
 
-  <!-- Info Section -->
   <div id="info-section" style="flex: 1; padding: 10px;">
     <div id="spot-info">
-      <!-- Placeholder content -->
-      <h2>Select a Spot</h2>
-      <p>Click on a marker to see more information about the spot.</p>
+      <!-- Placeholder content with legend -->
+      <h2 style="white-space: normal; max-width: 600px; line-height: 1.4;">
+        В Черно море вълните следват вятъра, и качеството на сърфа зависи от неговата сила и посока. Офшорният вятър е рядкост, понякога е като подарък от морето за най-ранобудните сърфисти.
+      </h2>
+      <ul class="legend-list" style="list-style: none; padding: 0; margin-top: 10px;">
+        <!-- Wave Icons -->
+        <li><strong>Маркери</strong></li>
+        <li style="display: flex; align-items: center; margin-bottom: 5px;">
+          <%= image_tag "water-waves.webp", alt: "Water Waves Icon", style: "width: 24px; height: 24px; margin-right: 8px;" %> Места за каране на сърф
+        </li>
+        <li style="display: flex; align-items: center; margin-bottom: 5px;">
+          <%= image_tag "landmark_images/school.webp", alt: "Surf School Icon", style: "width: 24px; height: 24px; margin-right: 8px;" %> Сърф училища
+        </li>
+        <li style="display: flex; align-items: center; margin-bottom: 5px;">
+          <%= image_tag "landmark_images/shaper.webp", alt: "Surf Shapers Icon", style: "width: 24px; height: 24px; margin-right: 8px;" %> Шейпъри
+        </li>
+        <li style="display: flex; align-items: center; margin-bottom: 5px;">
+          <%= image_tag "landmark_images/shop.webp", alt: "Surf Shop Icon", style: "width: 24px; height: 24px; margin-right: 8px;" %> Магазини
+        </li>
+         <li><strong>Посока на вълната</strong></li>
+        <li style="display: flex; align-items: center; margin-bottom: 5px;">
+          <%= image_tag "spot_images/shiftingpeaks.webp", alt: "Shifting Peaks Icon", style: "width: 24px; height: 24px; margin-right: 8px;" %> Множество пикове
+        </li>
+        <li style="display: flex; align-items: center; margin-bottom: 5px;">
+          <%= image_tag "spot_images/righthander.webp", alt: "Righthander Icon", style: "width: 24px; height: 24px; margin-right: 8px;" %> Дясна вълна
+        </li>
+        <li style="display: flex; align-items: center; margin-bottom: 5px;">
+          <%= image_tag "spot_images/lefthander.webp", alt: "Lefthander Icon", style: "width: 24px; height: 24px; margin-right: 8px;" %> Лява вълна
+        </li>
+        <li style="display: flex; align-items: center; margin-bottom: 5px;">
+          <%= image_tag "spot_images/Aframe.webp", alt: "Aframe Icon", style: "width: 24px; height: 24px; margin-right: 8px;" %> А фрейм
+        </li>
+
+        <!-- Seabed Icons -->
+        <li><strong>Видове дъно</strong></li>
+        <li style="display: flex; align-items: center; margin-bottom: 5px;">
+          <%= image_tag "spot_images/sand.webp", alt: "Sand Icon", style: "width: 24px; height: 24px; margin-right: 8px;" %> Пясък
+        </li>
+        <li style="display: flex; align-items: center; margin-bottom: 5px;">
+          <%= image_tag "spot_images/rock.webp", alt: "Rock Icon", style: "width: 24px; height: 24px; margin-right: 8px;" %> Риф
+        </li>
+        <li style="display: flex; align-items: center; margin-bottom: 5px;">
+          <%= image_tag "spot_images/mixed.webp", alt: "Mixed Icon", style: "width: 24px; height: 24px; margin-right: 8px;" %> Смесено
+        </li>
+
+        <!-- Swell Window Icons -->
+        <li><strong>Посока на swella</strong></li>
+        <li style="display: flex; align-items: center; margin-bottom: 5px;">
+          <%= image_tag "spot_images/swellwindow-NE.webp", alt: "NE Icon", style: "width: 24px; height: 24px; margin-right: 8px;" %> Северо-изток
+        </li>
+        <li style="display: flex; align-items: center; margin-bottom: 5px;">
+          <%= image_tag "spot_images/swellwindow-NEE.webp", alt: "NE/E Icon", style: "width: 24px; height: 24px; margin-right: 8px;" %> Северо-изток / Изток
+        </li>
+        <li style="display: flex; align-items: center; margin-bottom: 5px;">
+          <%= image_tag "spot_images/swellwindow-E.webp", alt: "E Icon", style: "width: 24px; height: 24px; margin-right: 8px;" %> Изток
+        </li>
+        <li style="display: flex; align-items: center; margin-bottom: 5px;">
+          <%= image_tag "spot_images/swellwindow-ESE.webp", alt: "E/SE Icon", style: "width: 24px; height: 24px; margin-right: 8px;" %> Изток / Юго-изток
+        </li>
+        <li style="display: flex; align-items: center; margin-bottom: 5px;">
+          <%= image_tag "spot_images/swellwindow-SE.webp", alt: "SE Icon", style: "width: 24px; height: 24px; margin-right: 8px;" %> Юго-изток
+        </li>
+        <li style="display: flex; align-items: center; margin-bottom: 5px;">
+          <%= image_tag "spot_images/swellwindow-all.webp", alt: "NE/E/SE Icon", style: "width: 24px; height: 24px; margin-right: 8px;" %> Северо-изток / Изток / Юго-изток
+        </li>
+      </ul>
     </div>
   </div>
 </div>
 
 <!-- Filter and List Section -->
-<div class="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
+<div id="filter-container" class="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
   <!-- Filter Buttons with Wrapping -->
   <div class="flex flex-wrap justify-center gap-3 mb-6 px-2">
     <button id="allBtn" class="filter-btn bg-blue-500 text-white font-semibold py-2 px-4 rounded-full hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-300 transition">Всички</button>
@@ -66,13 +133,46 @@
 
 
   <!-- List Container -->
-  <div id="list-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+  <div id= "list-container"class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
 </div>
+
+<footer class="bg-gray-200 px-6 py-4">
+  <div>
+    <p>
+      Photo Credits:
+      <a href="https://www.instagram.com/kolevyoan" target="_blank" rel="noopener noreferrer" style="color: #3e70a6; font-weight: bold; text-decoration: underline;">Йоан Колев</a>,
+      <a href="https://www.instagram.com/evilbagpipe" target="_blank" rel="noopener noreferrer" style="color: #3e70a6; font-weight: bold; text-decoration: underline;">Сияна Саздова</a>
+    </p>
+  </div>
+</footer>
 
 <!-- JavaScript Code -->
 <script type="text/javascript">
   document.addEventListener('DOMContentLoaded', function() {
-    console.log('Initializing map...');
+    // Define isMobile variable
+    let isMobile = window.innerWidth < 768;
+
+    // Update isMobile on window resize
+    window.addEventListener('resize', function() {
+      isMobile = window.innerWidth < 768;
+    });
+
+    // Function to get consistency visual representation
+    function getConsistencyVisual(consistency) {
+      const maxCircles = 5;
+      const filledCircles = Math.min(consistency, maxCircles);
+      const emptyCircles = maxCircles - filledCircles;
+
+      let visual = '';
+      for (let i = 0; i < filledCircles; i++) {
+        visual += '<span class="bg-blue-500 inline-block w-4 h-4 rounded-full"></span>';
+      }
+      for (let i = 0; i < emptyCircles; i++) {
+        visual += '<span class="bg-gray-300 inline-block w-4 h-4 rounded-full"></span>';
+      }
+
+      return visual;
+    }
 
     // Fetch spots and landmarks data from the controller
     const spots = <%= raw @spots.to_json(
@@ -98,9 +198,7 @@
       methods: [:image_asset_url]
     ) %>;
 
-    console.log('Spots Data:', spots);
-    console.log('Landmarks Data:', landmarks);
-
+    // Initialize the map when Turbo loads
     document.addEventListener('turbo:load', function() {
       if (document.getElementById('map')) {
         initMap();
@@ -109,6 +207,7 @@
 
     let mapInstance = null;
 
+    // Function to initialize the Google Map
     window.initMap = function() {
       if (mapInstance) {
         return; // Map is already initialized
@@ -124,55 +223,60 @@
         maxZoom: 18,
         mapTypeId: 'satellite',
         gestureHandling: 'greedy',
+        liteMode: true,
       });
       mapInstance = map;
 
-      let isMobile = window.innerWidth < 768;
       let openInfoWindow = null;
 
       const waveIcons = {
-        "Shifting Peaks": '<%= asset_path("spot_images/shiftingpeaks.png") %>', // Example wave type
-        "Righthander": '<%= asset_path("spot_images/righthander.png") %>',
-        "Lefthander": '<%= asset_path("spot_images/lefthander.png") %>',
-        "Aframe": '<%= asset_path("spot_images/Aframe.png") %>',
-        // Add more wave types here with corresponding icons
+        "Shifting Peaks": '<%= asset_path("spot_images/shiftingpeaks.webp") %>',
+        "Righthander": '<%= asset_path("spot_images/righthander.webp") %>',
+        "Lefthander": '<%= asset_path("spot_images/lefthander.webp") %>',
+        "Aframe": '<%= asset_path("spot_images/Aframe.webp") %>',
       };
 
       const seabedIcons = {
-        "Sand": '<%= asset_path("spot_images/sand.png") %>', // Example seabed type
-        "Rock": '<%= asset_path("spot_images/rock.png") %>',
-        "Mixed": '<%= asset_path("spot_images/mixed.png") %>',
-        // Add more seabed types here with corresponding icons
+        "Sand": '<%= asset_path("spot_images/sand.webp") %>',
+        "Rock": '<%= asset_path("spot_images/rock.webp") %>',
+        "Mixed": '<%= asset_path("spot_images/mixed.webp") %>',
       };
 
-      const customIconUrl = '<%= asset_path("water-waves.png") %>';
+      const swellIcons = {
+        "NE": '<%= asset_path("spot_images/swellwindow-NE.webp") %>',
+        "NE/E": '<%= asset_path("spot_images/swellwindow-NEE.webp") %>',
+        "E": '<%= asset_path("spot_images/swellwindow-E.webp") %>',
+        "E/SE": '<%= asset_path("spot_images/swellwindow-ESE.webp") %>',
+        "SE": '<%= asset_path("spot_images/swellwindow-SE.webp") %>',
+        "NE/E/SE": '<%= asset_path("spot_images/swellwindow-all.webp") %>',
+      };
+
+      const customIconUrl = '<%= asset_path("water-waves.webp") %>';
       const customIcon = {
         url: customIconUrl,
-        scaledSize: new google.maps.Size(40, 40), // Adjust the size here
-        anchor: new google.maps.Point(20, 40),    // Adjust the anchor point based on the size
+        scaledSize: new google.maps.Size(40, 40),
+        anchor: new google.maps.Point(20, 40),
       };
 
-      // Define different icons for different types of landmarks
       const landmarkIcons = {
-        school: '<%= asset_path("landmark_images/school.png") %>',
-        shop: '<%= asset_path("landmark_images/shop.png") %>',
-        shaper: '<%= asset_path("landmark_images/shaper.png") %>'
+        school: '<%= asset_path("landmark_images/school.webp") %>',
+        shop: '<%= asset_path("landmark_images/shop.webp") %>',
+        shaper: '<%= asset_path("landmark_images/shaper.webp") %>',
       };
 
       // Add markers for spots
       spots.forEach(function(spot) {
-        createSpotMarker(spot, customIcon, map, isMobile);
+        createSpotMarker(spot, customIcon, map);
       });
 
       // Add markers for landmarks
       landmarks.forEach(function(landmark) {
-        // Determine which icon to use based on the landmark_type
-        const markerIcon = landmarkIcons[landmark.landmark_type] || landmarkIcons['shop']; // Default to 'shop' icon if type is undefined
-        createLandmarkMarker(landmark, markerIcon, map, isMobile);
+        const markerIcon = landmarkIcons[landmark.landmark_type] || landmarkIcons['shop'];
+        createLandmarkMarker(landmark, markerIcon, map);
       });
-      
+
       // Function to create a marker and attach info window for spots
-      function createSpotMarker(spot, icon, map, isMobile) {
+      function createSpotMarker(spot, icon, map) {
         const marker = new google.maps.Marker({
           position: { lat: parseFloat(spot.latitude), lng: parseFloat(spot.longitude) },
           map: map,
@@ -180,36 +284,36 @@
           icon: icon,
         });
 
-        let waveTypeIcon = waveIcons[spot.wave_type] || '';
-        let seabedTypeIcon = seabedIcons[spot.seabed_type] || '';
+        const waveTypeIcon = waveIcons[spot.wave_type] || '';
+        const seabedTypeIcon = seabedIcons[spot.seabed_type] || '';
+        const swellTypeIcon = swellIcons[spot.swell_window] || '';
+        const consistencyVisual = getConsistencyVisual(spot.consistency);
         let infoContent = '';
 
         if (isMobile) {
-          // Mobile view: No image, styled text
           infoContent = `
-              <div style="padding: 0; margin: 0;">
-            ${spot.image_asset_url ? `<img src="${spot.image_asset_url}" alt="${spot.name}" style="width: 100%; height: auto; display: block; border-radius: 10px 10px 0 0;">` : ''}
-            <div class="p-4">
+            <div style="padding: 0; margin: 0;">
+              ${spot.image_asset_url ? `<img src="${spot.image_asset_url}" alt="${spot.name}" style="width: 100%; height: auto; display: block; border-radius: 10px 10px 0 0;">` : ''}
+              <div class="p-4">
                 <h1 class="text-xl font-bold mb-2">${spot.name}</h1>
                 <p class="text-gray-700 mb-2">${spot.description}</p>
                 <ul class="mb-2">
-                    <li class="flex items-center mb-2">
-                        <img src="${waveTypeIcon}" alt="Wave Type" class="inline-block" style="width: 24px; height: 24px;" />
-                        <img src="${seabedTypeIcon}" alt="Seabed Type" class="inline-block ml-2" style="width: 24px; height: 24px;" />
-                    </li>
-                    <li><strong>Swell Window:</strong> ${spot.swell_window || 'N/A'}</li>
-                    <li><strong>Consistency:</strong> ${spot.consistency || 'N/A'}</li>
-                    <li><strong>Break Type:</strong> ${spot.break_type || 'N/A'}</li>
+                  <li class="flex items-center mb-2">
+                    ${waveTypeIcon ? `<img src="${waveTypeIcon}" alt="Wave Type" class="inline-block" style="width: 24px; height: 24px;" />` : ''}
+                    ${seabedTypeIcon ? `<img src="${seabedTypeIcon}" alt="Seabed Type" class="inline-block ml-2" style="width: 24px; height: 24px;" />` : ''}
+                    ${swellTypeIcon ? `<img src="${swellTypeIcon}" alt="Swell Window" class="inline-block ml-2" style="width: 24px; height: 24px;" />` : ''}
+                  </li>
+                  <li>${consistencyVisual}</li>
+                  <li><strong>Break Type:</strong> ${spot.break_type || 'N/A'}</li>
                 </ul>
-                <a href="/spots/${spot.slug}" class="inline-flex items-center justify-center w-full px-6 py-2 bg-blue-100 text-black font-bold rounded-lg shadow-lg border-2 border-blue-300 hover:bg-blue-200 transform transition-transform duration-300 ease-in-out hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-200 focus:ring-opacity-75"
-                    style="background-color: #E0F2FE !important; border-color: #7DD3FC !important; color: black !important;">
-                    <i class="fas fa-info-circle mr-2"></i> View More
+                <a href="/spots/${spot.slug}" class="inline-flex items-center justify-center w-full px-6 py-2 bg-blue-100 text-black font-bold rounded-lg shadow-lg border-2 border-blue-300 hover:bg-blue-200 focus:outline-none focus:ring-4 focus:ring-blue-200"
+                  style="background-color: #E0F2FE !important; border-color: #7DD3FC !important;">
+                  <i class="fas fa-info-circle mr-2"></i> View More
                 </a>
+              </div>
             </div>
-        </div>
-    `;
+          `;
         } else {
-          // Desktop view: Include image as banner
           let imageBanner = '';
           if (spot.image_asset_url) {
             imageBanner = `<img src="${spot.image_asset_url}" alt="${spot.name}" class="w-full h-64 object-cover mb-4 rounded-t-lg">`;
@@ -224,20 +328,29 @@
                 <ul class="mb-4">
                   <li class="flex items-center">
                     <strong>Wave Type:</strong>&nbsp;
-                    <span>${spot.wave_type || 'N/A'}</span> 
-                    <img src="${waveTypeIcon}" alt="Wave Type" class="inline-block ml-2" style="width: 24px; height: 24px;" />
+                    <span>${spot.wave_type || 'N/A'}</span>
+                    ${waveTypeIcon ? `<img src="${waveTypeIcon}" alt="Wave Type" class="inline-block ml-2" style="width: 24px; height: 24px;" />` : ''}
                   </li>
                   <li class="flex items-center">
                     <strong>Seabed Type:</strong>&nbsp;
                     <span>${spot.seabed_type || 'N/A'}</span>
-                    <img src="${seabedTypeIcon}" alt="Seabed Type" class="inline-block ml-2" style="width: 24px; height: 24px;" />
+                    ${seabedTypeIcon ? `<img src="${seabedTypeIcon}" alt="Seabed Type" class="inline-block ml-2" style="width: 24px; height: 24px;" />` : ''}
                   </li>
-                  <li><strong>Swell Window:</strong> ${spot.swell_window || 'N/A'}</li>
-                  <li><strong>Consistency:</strong> ${spot.consistency || 'N/A'}</li>
+                  <li class="flex items-center">
+                    <strong>Swell Window:</strong>&nbsp;
+                    <span>${spot.swell_window || 'N/A'}</span>
+                    ${swellTypeIcon ? `<img src="${swellTypeIcon}" alt="Swell Window" class="inline-block ml-2" style="width: 24px; height: 24px;" />` : ''}
+                  </li>
+                  <li class="flex items-center space-x-2">
+                    <strong>Consistency:</strong>
+                    <div class="flex items-center space-x-1">
+                      ${consistencyVisual}
+                    </div>
+                  </li>
                   <li><strong>Break Type:</strong> ${spot.break_type || 'N/A'}</li>
                 </ul>
-                <a href="/spots/${spot.slug}" class="inline-flex items-center justify-center w-100 px-6 py-2 bg-blue-100 text-black font-bold rounded-lg shadow-lg border-2 border-blue-300 hover:bg-blue-200 transform transition-transform duration-300 ease-in-out hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-200 focus:ring-opacity-75"
-                  style="background-color: #E0F2FE !important; border-color: #7DD3FC !important; color: black !important; padding-top: 10px; padding-bottom: 10px;padding-left: 10px;padding-right: 10px">
+                <a href="/spots/${spot.slug}" class="inline-flex items-center justify-center w-full px-6 py-2 bg-blue-100 text-black font-bold rounded-lg shadow-lg border-2 border-blue-300 hover:bg-blue-200 focus:outline-none focus:ring-4 focus:ring-blue-200"
+                  style="background-color: #E0F2FE !important; border-color: #7DD3FC !important;">
                   <i class="fas fa-info-circle mr-2"></i> View More
                 </a>
               </div>
@@ -263,14 +376,14 @@
       }
 
       // Function to create a marker and attach info window for landmarks
-      function createLandmarkMarker(landmark, icon, map, isMobile) {
+      function createLandmarkMarker(landmark, icon, map) {
         const marker = new google.maps.Marker({
           position: { lat: parseFloat(landmark.latitude), lng: parseFloat(landmark.longitude) },
           map: map,
           title: landmark.name,
           icon: {
             url: icon,
-            scaledSize: new google.maps.Size(40, 40), // Adjust the size for landmarks
+            scaledSize: new google.maps.Size(40, 40),
             anchor: new google.maps.Point(20, 40),
           },
         });
@@ -278,24 +391,22 @@
         let infoContent = '';
 
         if (isMobile) {
-          // Mobile view: No image, styled text
           infoContent = `
             <div style="padding: 0; margin: 0;">
-                ${landmark.image_asset_url ? `<img src="${landmark.image_asset_url}" alt="${landmark.name}" style="width: 100%; height: auto; display: block; border-radius: 10px 10px 0 0;">` : ''}
-                <div class="p-4">
-                    <h1 class="text-xl font-bold mb-2">${landmark.name}</h1>
-                    <p class="text-gray-700 mb-2">${landmark.description}</p>
-                    <a href="${landmark.url}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center w-full px-6 py-2 bg-blue-100 text-black font-bold rounded-lg shadow-lg border-2 border-blue-300 hover:bg-blue-200 transform transition-transform duration-300 ease-in-out hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-200 focus:ring-opacity-75"
-                        style="background-color: #E0F2FE !important; border-color: #7DD3FC !important; color: black !important;">
-                        <i class="fas fa-info-circle mr-2"></i> View More
-                    </a>
-                </div>
+              ${landmark.image_asset_url ? `<img src="${landmark.image_asset_url}" alt="${landmark.name}" style="width: 100%; height: auto; display: block; border-radius: 10px 10px 0 0;">` : ''}
+              <div class="p-4">
+                <h1 class="text-xl font-bold mb-2">${landmark.name}</h1>
+                <p class="text-gray-700 mb-2">${landmark.description}</p>
+                <a href="${landmark.url}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center w-full px-6 py-2 bg-blue-100 text-black font-bold rounded-lg shadow-lg border-2 border-blue-300 hover:bg-blue-200 focus:outline-none focus:ring-4 focus:ring-blue-200"
+                  style="background-color: #E0F2FE !important; border-color: #7DD3FC !important;">
+                  <i class="fas fa-info-circle mr-2"></i> View More
+                </a>
+              </div>
             </div>
-        `;
+          `;
         } else {
-          // Desktop view: Include image as banner
           let imageBanner = '';
-          if (landmark.image_url) {
+          if (landmark.image_asset_url) {
             imageBanner = `<img src="${landmark.image_asset_url}" alt="${landmark.name}" class="w-full h-64 object-cover mb-4 rounded-t-lg">`;
           }
 
@@ -305,10 +416,10 @@
               <div class="p-6">
                 <h1 class="text-2xl font-bold mb-4">${landmark.name}</h1>
                 <p class="text-gray-700 mb-4">${landmark.description}</p>
-               <a href="${landmark.url}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center w-100 px-6 py-2 bg-blue-100 text-black font-bold rounded-lg shadow-lg border-2 border-blue-300 hover:bg-blue-200 transform transition-transform duration-300 ease-in-out hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-200 focus:ring-opacity-75"
-    style="background-color: #E0F2FE !important; border-color: #7DD3FC !important; color: black !important; padding-top: 10px; padding-bottom: 10px;padding-left: 10px;padding-right: 10px">
-    <i class="fas fa-info-circle mr-2"></i> View More
-</a>
+                <a href="${landmark.url}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center w-full px-6 py-2 bg-blue-100 text-black font-bold rounded-lg shadow-lg border-2 border-blue-300 hover:bg-blue-200 focus:outline-none focus:ring-4 focus:ring-blue-200"
+                  style="background-color: #E0F2FE !important; border-color: #7DD3FC !important;">
+                  <i class="fas fa-info-circle mr-2"></i> View More
+                </a>
               </div>
             </div>
           `;
@@ -344,103 +455,203 @@
           document.getElementById('info-section').style.display = 'block';
         }
       }
+
+      const legendIcons = {
+        waterWaves: '<%= asset_path("water-waves.webp") %>',
+        surfSchool: '<%= asset_path("landmark_images/school.webp") %>',
+        surfShapers: '<%= asset_path("landmark_images/shaper.webp") %>',
+        surfShop: '<%= asset_path("landmark_images/shop.webp") %>',
+      };
+
+      const defaultInfoContent = `
+        <h2 style="white-space: normal; max-width: 600px; line-height: 1.4;">
+          В Черно море вълните следват вятъра, и качеството на сърфа зависи от неговата сила и посока. Офшорният вятър е рядкост, понякога е като подарък от морето за най-ранобудните сърфисти.
+        </h2>
+        <!-- Legend content goes here -->
+         <ul class="legend-list" style="list-style: none; padding: 0; margin-top: 10px;">
+      <li><strong>Маркери</strong></li>
+    <li style="display: flex; align-items: center; margin-bottom: 5px;">
+      <img src="${legendIcons.waterWaves}" alt="Water Waves Icon" style="width: 24px; height: 24px; margin-right: 8px;" /> Места за каране на сърф
+    </li>
+    <li style="display: flex; align-items: center; margin-bottom: 5px;">
+      <img src="${legendIcons.surfSchool}" alt="Surf School Icon" style="width: 24px; height: 24px; margin-right: 8px;" /> Сърф училища
+    </li>
+    <li style="display: flex; align-items: center; margin-bottom: 5px;">
+      <img src="${legendIcons.surfShapers}" alt="Surf Shapers Icon" style="width: 24px; height: 24px; margin-right: 8px;" /> Шейпъри
+    </li>
+    <li style="display: flex; align-items: center; margin-bottom: 5px;">
+      <img src="${legendIcons.surfShop}" alt="Surf Shop Icon" style="width: 24px; height: 24px; margin-right: 8px;" /> Магазини
+    </li>
+    <!-- Wave Icons -->
+    <li><strong>Посока на вълната</strong></li>
+    <li style="display: flex; align-items: center; margin-bottom: 5px;">
+      <img src="${waveIcons['Shifting Peaks']}" alt="Shifting Peaks Icon" style="width: 24px; height: 24px; margin-right: 8px;"> Множество пикове
+    </li>
+    <li style="display: flex; align-items: center; margin-bottom: 5px;">
+      <img src="${waveIcons['Righthander']}" alt="Righthander Icon" style="width: 24px; height: 24px; margin-right: 8px;"> Дясна вълна
+    </li>
+    <li style="display: flex; align-items: center; margin-bottom: 5px;">
+      <img src="${waveIcons['Lefthander']}" alt="Lefthander Icon" style="width: 24px; height: 24px; margin-right: 8px;"> Лява вълна
+    </li>
+    <li style="display: flex; align-items: center; margin-bottom: 5px;">
+      <img src="${waveIcons['Aframe']}" alt="Aframe Icon" style="width: 24px; height: 24px; margin-right: 8px;"> А фрейм
+    </li>
+    
+    <!-- Seabed Icons -->
+    <li><strong>Видове дъно</strong></li>
+    <li style="display: flex; align-items: center; margin-bottom: 5px;">
+      <img src="${seabedIcons['Sand']}" alt="Sand Icon" style="width: 24px; height: 24px; margin-right: 8px;"> Пясък
+    </li>
+    <li style="display: flex; align-items: center; margin-bottom: 5px;">
+      <img src="${seabedIcons['Rock']}" alt="Rock Icon" style="width: 24px; height: 24px; margin-right: 8px;"> Риф
+    </li>
+    <li style="display: flex; align-items: center; margin-bottom: 5px;">
+      <img src="${seabedIcons['Mixed']}" alt="Mixed Icon" style="width: 24px; height: 24px; margin-right: 8px;"> Смесено
+    </li>
+    
+    <!-- Swell Window Icons -->
+    <li><strong>Посока на swella</strong></li>
+    <li style="display: flex; align-items: center; margin-bottom: 5px;">
+      <img src="${swellIcons['NE']}" alt="NE Icon" style="width: 24px; height: 24px; margin-right: 8px;"> Северо-изток
+    </li>
+    <li style="display: flex; align-items: center; margin-bottom: 5px;">
+      <img src="${swellIcons['NE/E']}" alt="NE/E Icon" style="width: 24px; height: 24px; margin-right: 8px;"> Северо-изток / Изток
+    </li>
+    <li style="display: flex; align-items: center; margin-bottom: 5px;">
+      <img src="${swellIcons['E']}" alt="E Icon" style="width: 24px; height: 24px; margin-right: 8px;"> Изток
+    </li>
+    <li style="display: flex; align-items: center; margin-bottom: 5px;">
+      <img src="${swellIcons['E/SE']}" alt="E/SE Icon" style="width: 24px; height: 24px; margin-right: 8px;"> Изток / Юго-изток
+    </li>
+    <li style="display: flex; align-items: center; margin-bottom: 5px;">
+      <img src="${swellIcons['SE']}" alt="SE Icon" style="width: 24px; height: 24px; margin-right: 8px;"> Юго-изток
+    </li>
+    <li style="display: flex; align-items: center; margin-bottom: 5px;">
+      <img src="${swellIcons['NE/E/SE']}" alt="NE/E/SE Icon" style="width: 24px; height: 24px; margin-right: 8px;"> Северо-изток / Изток / Юго-изток
+    </li>
+  </ul>
+      `;
+
+      map.addListener('click', function() {
+        if (isMobile) {
+          if (openInfoWindow) openInfoWindow.close();
+        } else {
+          document.getElementById('spot-info').innerHTML = defaultInfoContent;
+        }
+      });
+    }; // End of initMap function
+
+    // Only execute the list rendering code if not on mobile
+    if (!isMobile) {
+      // Define container for list display
+      const listContainer = document.getElementById('list-container');
+
+      // Define waveIcons and seabedIcons with the correct paths to the icons
+      const waveIcons = {
+        "Shifting Peaks": '<%= asset_path("spot_images/shiftingpeaks.webp") %>',
+        "Righthander": '<%= asset_path("spot_images/righthander.webp") %>',
+        "Lefthander": '<%= asset_path("spot_images/lefthander.webp") %>',
+        "Aframe": '<%= asset_path("spot_images/Aframe.webp") %>',
+      };
+
+      const seabedIcons = {
+        "Sand": '<%= asset_path("spot_images/sand.webp") %>',
+        "Rock": '<%= asset_path("spot_images/rock.webp") %>',
+        "Mixed": '<%= asset_path("spot_images/mixed.webp") %>',
+      };
+
+      const swellIcons = {
+        "NE": '<%= asset_path("spot_images/swellwindow-NE.webp") %>',
+        "NE/E": '<%= asset_path("spot_images/swellwindow-NEE.webp") %>',
+        "E": '<%= asset_path("spot_images/swellwindow-E.webp") %>',
+        "E/SE": '<%= asset_path("spot_images/swellwindow-ESE.webp") %>',
+        "SE": '<%= asset_path("spot_images/swellwindow-SE.webp") %>',
+        "NE/E/SE": '<%= asset_path("spot_images/swellwindow-all.webp") %>',
+      };
+
+      // Function to render list items
+      function renderList(items) {
+        // Clear previous content
+        listContainer.innerHTML = '';
+
+        items.forEach(item => {
+          const itemCard = document.createElement('div');
+          itemCard.className = 'bg-white rounded-lg shadow-md overflow-hidden flex flex-col h-full';
+
+          // Image for the banner
+          const imageBanner = item.image_asset_url ? `<img src="${item.image_asset_url}" alt="${item.name}" class="w-full h-64 object-cover mb-4 rounded-t-lg">` : '';
+
+          // Get the correct icons for wave type and seabed type
+          const waveTypeIcon = waveIcons[item.wave_type] || '';
+          const seabedTypeIcon = seabedIcons[item.seabed_type] || '';
+          const swellTypeIcon = swellIcons[item.swell_window] || '';
+
+          // Display the icons instead of text
+          const typeSpecificInfo = `
+            <div class="flex items-center space-x-2">
+              ${waveTypeIcon ? `<img src="${waveTypeIcon}" alt="Wave Type" class="inline-block" style="width: 24px; height: 24px;" />` : ''}
+              ${seabedTypeIcon ? `<img src="${seabedTypeIcon}" alt="Seabed Type" class="inline-block" style="width: 24px; height: 24px;" />` : ''}
+              ${swellTypeIcon ? `<img src="${swellTypeIcon}" alt="Swell Window" class="inline-block" style="width: 24px; height: 24px;" />` : ''}
+            </div>`;
+
+          // URL and target attributes for the button
+          const itemUrl = item.url || `/spots/${item.slug}`;
+          const targetAttr = item.url ? '_blank' : '_self';
+
+          // Card HTML content
+          itemCard.innerHTML = `
+            ${imageBanner}
+            <div class="flex flex-col justify-between h-full">
+              <div class="p-6 flex-grow">
+                <h2 class="text-2xl font-bold mb-2">${item.name}</h2>
+                ${typeSpecificInfo}
+                <p class="text-gray-700 mb-4">${item.description}</p>
+              </div>
+              <div class="p-6 pt-0 mt-auto">
+                <a href="${itemUrl}" target="${targetAttr}" 
+                  class="inline-flex items-center justify-center w-full px-6 py-2 bg-blue-100 text-black font-bold rounded-lg shadow-lg border-2 border-blue-300 hover:bg-blue-200 focus:outline-none focus:ring-4 focus:ring-blue-200">
+                  <i class="fas fa-info-circle mr-2"></i> Вижте още
+                </a>
+              </div>
+            </div>
+          `;
+
+          // Append the card to the list container
+          listContainer.appendChild(itemCard);
+        });
+      }
+
+      // Render All Items by Default
+      renderList([...spots, ...landmarks]);
+
+      // Filter Buttons
+      const allBtn = document.getElementById('allBtn');
+      const spotsBtn = document.getElementById('spotsBtn');
+      const schoolBtn = document.getElementById('schoolBtn');
+      const shopBtn = document.getElementById('shopBtn');
+      const shaperBtn = document.getElementById('shaperBtn');
+
+      // Button Event Listeners
+      allBtn.addEventListener('click', () => renderList([...spots, ...landmarks]));
+      spotsBtn.addEventListener('click', () => renderList(spots));
+      schoolBtn.addEventListener('click', () => renderList(landmarks.filter(landmark => landmark.landmark_type === 'school')));
+      shopBtn.addEventListener('click', () => renderList(landmarks.filter(landmark => landmark.landmark_type === 'shop')));
+      shaperBtn.addEventListener('click', () => renderList(landmarks.filter(landmark => landmark.landmark_type === 'shaper')));
+    } else {
+      // Optionally hide the list container and filter buttons on mobile
+      const listContainer = document.getElementById('list-container');
+      if (listContainer) {
+        listContainer.style.display = 'none';
+      }
+      const filterButtons = document.querySelectorAll('.filter-btn');
+      filterButtons.forEach(btn => btn.style.display = 'none');
     }
-
-  // Define container for list display
-  const listContainer = document.getElementById('list-container');
-
-// Define waveIcons and seabedIcons with the correct paths to the icons
-const waveIcons = {
-  "Shifting Peaks": '<%= asset_path("spot_images/shiftingpeaks.png") %>',
-  "Righthander": '<%= asset_path("spot_images/righthander.png") %>',
-  "Lefthander": '<%= asset_path("spot_images/lefthander.png") %>',
-  "Aframe": '<%= asset_path("spot_images/Aframe.png") %>',
-  // Add more wave types as needed
-};
-
-const seabedIcons = {
-  "Sand": '<%= asset_path("spot_images/sand.png") %>',
-  "Rock": '<%= asset_path("spot_images/rock.png") %>',
-  "Mixed": '<%= asset_path("spot_images/mixed.png") %>',
-  // Add more seabed types as needed
-};
-
-// Function to render list items
-function renderList(items) {
-  // Clear previous content
-  listContainer.innerHTML = '';
-
-  items.forEach(item => {
-    const itemCard = document.createElement('div');
-    itemCard.className = 'bg-white rounded-lg shadow-md overflow-hidden flex flex-col h-full';
-
-    // Image for the banner
-    const imageBanner = item.image_asset_url ? `<img src="${item.image_asset_url}" alt="${item.name}" class="w-full h-64 object-cover mb-4 rounded-t-lg">` : '';
-
-    // Get the correct icons for wave type and seabed type
-    const waveTypeIcon = waveIcons[item.wave_type] || '';
-    const seabedTypeIcon = seabedIcons[item.seabed_type] || '';
-
-    // Debugging logs
-    console.log("Rendering item:", item.name);
-    console.log("Wave Type Icon:", waveTypeIcon);
-    console.log("Seabed Type Icon:", seabedTypeIcon);
-
-    // Display the icons instead of text
-    const typeSpecificInfo = `
-      <div class="flex items-center space-x-2">
-        ${waveTypeIcon ? `<img src="${waveTypeIcon}" alt="Wave Type" class="inline-block" style="width: 24px; height: 24px;" />` : ''}
-        ${seabedTypeIcon ? `<img src="${seabedTypeIcon}" alt="Seabed Type" class="inline-block ml-2" style="width: 24px; height: 24px;" />` : ''}
-      </div>`;
-
-    // URL and target attributes for the button
-    const itemUrl = item.url || `/spots/${item.slug}`;
-    const targetAttr = item.url ? '_blank' : '_self';
-
-    // Card HTML content
-    itemCard.innerHTML = `
-  ${imageBanner}
-  <div class="flex flex-col justify-between h-full"> 
-    <div class="p-6 flex-grow">
-      <h2 class="text-2xl font-bold mb-2">${item.name}</h2>
-      ${typeSpecificInfo} <!-- Moved here, directly under the title -->
-      <p class="text-gray-700 mb-4">${item.description}</p>
-    </div>
-    <div class="p-6 pt-0 mt-auto">
-      <a href="${itemUrl}" target="${targetAttr}" 
-         class="inline-flex items-center justify-center w-full px-6 py-2 bg-blue-100 text-black font-bold rounded-lg shadow-lg border-2 border-blue-300 hover:bg-blue-200 transform transition-transform duration-300 ease-in-out hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-200 focus:ring-opacity-75">
-        <i class="fas fa-info-circle mr-2"></i> Вижте още
-      </a>
-    </div>
-  </div>`;
-
-    // Append the card to the list container
-    listContainer.appendChild(itemCard);
-  });
-}
-
-  // Render All Items by Default
-  renderList([...spots, ...landmarks]);
-
-  // Filter Buttons
-  const allBtn = document.getElementById('allBtn');
-  const spotsBtn = document.getElementById('spotsBtn');
-  const schoolBtn = document.getElementById('schoolBtn');
-  const shopBtn = document.getElementById('shopBtn');
-  const shaperBtn = document.getElementById('shaperBtn');
-
-  // Button Event Listeners
-  allBtn.addEventListener('click', () => renderList([...spots, ...landmarks]));
-  spotsBtn.addEventListener('click', () => renderList(spots));
-  schoolBtn.addEventListener('click', () => renderList(landmarks.filter(landmark => landmark.landmark_type === 'school')));
-  shopBtn.addEventListener('click', () => renderList(landmarks.filter(landmark => landmark.landmark_type === 'shop')));
-  shaperBtn.addEventListener('click', () => renderList(landmarks.filter(landmark => landmark.landmark_type === 'shaper')));
-});
+  }); // End of DOMContentLoaded event listener
 </script>
 
 
 
 
 <% unless defined?(google) && google.maps %>
-<%= javascript_include_tag "https://maps.googleapis.com/maps/api/js?key=#{Rails.application.credentials.dig(:google_maps, :api_key)}&callback=initMap"%>
+<%= javascript_include_tag "https://maps.googleapis.com/maps/api/js?key=#{Rails.application.credentials.dig(:google_maps, :api_key)}&callback=initMap",loading: "lazy", async: true, defer: true%>
 <% end %>

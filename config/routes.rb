@@ -6,7 +6,6 @@ Rails.application.routes.draw do
   get 'spots/new'
   get 'spots/edit'
   get 'home/index'
-  get 'euxine', to: 'home#euxine'
   get 'club', to: 'home#club'
   get 'codex', to: 'home#codex'
   devise_for :users
@@ -14,6 +13,10 @@ Rails.application.routes.draw do
   resources :landmarks, only: [:index, :show]
   # Root path route
   root "home#index"
+
+  match '/robots.txt', to: proc { [200, {}, [Rails.root.join('public', 'robots.txt').read]] }, via: :all
+  match '/favicon.ico', to: proc { [204, {}, []] }, via: :all
+  
   match '*path', to: redirect('/'), via: :all
   # Health check route
   get "up" => "rails/health#show", as: :rails_health_check
