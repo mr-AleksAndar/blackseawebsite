@@ -1,0 +1,10 @@
+<!-- app/views/products/index.html.erb -->
+<h1>Shop</h1>
+
+<% @products.each do |product| %>
+  <div>
+    <h2><%= link_to product.name, product_path(product) %></h2>
+    <p><%= product.description %></p>
+    <p>Price: $<%= product.price %></p>
+  </div>
+<% end %>

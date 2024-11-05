@@ -1,0 +1,10 @@
+<!-- app/views/order_mailer/fast_order_email.html.erb -->
+<h1>New Fast Order Received</h1>
+
+<p><strong>Product:</strong> <%= @product.name %></p>
+<p><strong>Size:</strong> <%= @variant.size %></p>
+
+<h2>Customer Details</h2>
+<p><strong>Name:</strong> <%= @customer[:name] %></p>
+<p><strong>Email:</strong> <%= @customer[:email] %></p>
+<p><strong>Phone:</strong> <%= @customer[:phone] %></p>

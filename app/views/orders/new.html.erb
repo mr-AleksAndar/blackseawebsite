@@ -1,0 +1,26 @@
+<!-- app/views/orders/new.html.erb -->
+<h1>Fast Order</h1>
+<p>Product: <%= @product.name %></p>
+<p>Size: <%= @variant.size %></p>
+
+<%= form_with url: orders_path, method: :post do |f| %>
+  <%= hidden_field_tag :product_id, @product.id %>
+  <%= hidden_field_tag :variant_id, @variant.id %>
+
+  <div>
+    <%= label_tag :name, 'Your Name' %>
+    <%= text_field_tag 'order[name]', nil, required: true %>
+  </div>
+
+  <div>
+    <%= label_tag :email, 'Your Email' %>
+    <%= email_field_tag 'order[email]', nil, required: true %>
+  </div>
+
+  <div>
+    <%= label_tag :phone, 'Your Phone Number' %>
+    <%= telephone_field_tag 'order[phone]', nil, required: true %>
+  </div>
+
+  <%= submit_tag 'Place Order' %>
+<% end %>

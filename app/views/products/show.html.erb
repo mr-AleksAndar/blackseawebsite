@@ -1,0 +1,18 @@
+<!-- app/views/products/show.html.erb -->
+<h1><%= @product.name %></h1>
+<p><%= @product.description %></p>
+<p>Price: $<%= @product.price %></p>
+
+<h3>Available Sizes</h3>
+<ul>
+  <% @variants.each do |variant| %>
+    <li>
+      Size: <%= variant.size %> - Stock: <%= variant.stock %>
+      <% if variant.stock > 0 %>
+        <%= link_to 'Fast Order', new_order_path(product_id: @product.id, variant_id: variant.id) %>
+      <% else %>
+        <em>Out of Stock</em>
+      <% end %>
+    </li>
+  <% end %>
+</ul>
