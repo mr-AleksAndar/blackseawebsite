@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'carts/show'
+  get 'carts/destroy'
   devise_for :users
 
   # Root path route
@@ -16,6 +18,14 @@ Rails.application.routes.draw do
   # Shop routes
   resources :products, only: [:index, :show]
   resources :orders, only: [:new, :create]
+
+  resource :cart, only: [:show, :update, :destroy]
+resources :line_items, only: [:create, :update, :destroy]
+
+resources :orders, only: [:new, :create]
+get 'checkout', to: 'orders#new', as: :checkout
+resource :cart, only: [:show, :destroy]
+resources :line_items, only: [:create, :update, :destroy]
 
   # Robots.txt and favicon.ico
   match '/robots.txt', to: proc { [200, {}, [Rails.root.join('public', 'robots.txt').read]] }, via: :all

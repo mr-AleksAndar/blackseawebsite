@@ -1,26 +1,61 @@
 <!-- app/views/orders/new.html.erb -->
-<h1>Fast Order</h1>
-<p>Product: <%= @product.name %></p>
-<p>Size: <%= @variant.size %></p>
+<h1 class="text-3xl font-bold mb-6">Checkout</h1>
 
-<%= form_with url: orders_path, method: :post do |f| %>
-  <%= hidden_field_tag :product_id, @product.id %>
-  <%= hidden_field_tag :variant_id, @variant.id %>
-
-  <div>
-    <%= label_tag :name, 'Your Name' %>
-    <%= text_field_tag 'order[name]', nil, required: true %>
+<%= form_with model: @order, url: orders_path, local: true do |f| %>
+  <div class="grid gap-4 mb-8">
+    <div>
+      <%= f.label :name, class: "block font-medium" %>
+      <%= f.text_field :name, class: "w-full border rounded p-2", required: true %>
+    </div>
+    <div>
+      <%= f.label :email, class: "block font-medium" %>
+      <%= f.email_field :email, class: "w-full border rounded p-2", required: true %>
+    </div>
+    <div>
+      <%= f.label :phone, class: "block font-medium" %>
+      <%= f.telephone_field :phone, class: "w-full border rounded p-2", required: true %>
+    </div>
+    <div>
+      <%= f.label :address, class: "block font-medium" %>
+      <%= f.text_field :address, class: "w-full border rounded p-2", required: true %>
+    </div>
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <%= f.label :city, class: "block font-medium" %>
+        <%= f.text_field :city, class: "w-full border rounded p-2", required: true %>
+      </div>
+      <div>
+        <%= f.label :postal_code, class: "block font-medium" %>
+        <%= f.text_field :postal_code, class: "w-full border rounded p-2", required: true %>
+      </div>
+    </div>
   </div>
 
-  <div>
-    <%= label_tag :email, 'Your Email' %>
-    <%= email_field_tag 'order[email]', nil, required: true %>
-  </div>
+  <h2 class="text-2xl font-semibold mb-4">Order Summary</h2>
+  <table class="w-full mb-6 border-collapse">
+    <thead>
+      <tr>
+        <th class="text-left p-2 border-b">Product</th>
+        <th class="text-left p-2 border-b">Size</th>
+        <th class="text-left p-2 border-b">Qty</th>
+        <th class="text-left p-2 border-b">Subtotal</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @cart_items.each do |variant_id, qty| %>
+        <% variant = Variant.find(variant_id) %>
+        <tr>
+          <td class="p-2 border-b"><%= variant.product.name %></td>
+          <td class="p-2 border-b"><%= variant.size %></td>
+          <td class="p-2 border-b"><%= qty %></td>
+          <td class="p-2 border-b">
+            $<%= "%.2f" % (variant.product.price * qty.to_i) %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 
-  <div>
-    <%= label_tag :phone, 'Your Phone Number' %>
-    <%= telephone_field_tag 'order[phone]', nil, required: true %>
-  </div>
-
-  <%= submit_tag 'Place Order' %>
+  <%= f.submit "Place Order",
+        class: "w-full bg-green-600 text-black py-3 rounded hover:bg-green-700 transition" %>
 <% end %>

@@ -1,11 +1,18 @@
 # app/controllers/products_controller.rb
 class ProductsController < ApplicationController
   def index
-    @products = Product.includes(:variants)
+    @tags = Tag.order(:name)
+    if params[:tag].present?
+      @products = Tag.find_by(name: params[:tag])&.products || Product.none
+    else
+      @products = Product.all
+    end
+    @products = @products.includes(:variants)
   end
 
   def show
-    @product = Product.find(params[:id])
+    # Use FriendlyId to look up by slug instead of numeric ID
+    @product  = Product.friendly.find(params[:id])
     @variants = @product.variants
   end
 end

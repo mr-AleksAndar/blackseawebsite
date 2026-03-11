@@ -18,7 +18,7 @@
     <meta name="twitter:title" content="Surf Black Sea - Discover Surf Spots">
     <meta name="twitter:description" content="Explore and surf the Black Sea with our complete guide to surf spots in Bulgaria.">
     <meta name="twitter:image" content="<%= asset_path('club_banner.webp') %>">
-
+    
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-EJ6C9PDJVJ"></script>
     <script>
@@ -30,7 +30,7 @@
     </script>
 
     <%= yield :head %>
-    
+    <%= tag.link rel: "canonical", href: (content_for?(:canonical) ? yield(:canonical) : canonical_url) %>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <%= favicon_link_tag asset_path('water-waves.webp'), rel: 'icon', type: 'image/png', sizes: '32x32' %>

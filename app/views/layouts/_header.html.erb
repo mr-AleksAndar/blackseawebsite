@@ -23,9 +23,10 @@
       <nav class="hidden md:flex space-x-10" id="navbar-menu">
         <%= link_to 'Карта', root_path, class: 'text-base font-medium text-gray-500 hover:text-gray-900', data: { turbo: false }  %>
         <%= link_to 'Кодекс', codex_path, class: 'text-base font-medium text-gray-500 hover:text-gray-900' %>
-        <%= link_to 'Бутик', products_path, class: 'text-base font-medium text-gray-500 hover:text-gray-900' %>
+       <!-- <%= link_to 'Бутик', products_path, class: 'text-base font-medium text-gray-500 hover:text-gray-900' %> -->
         <%= link_to 'Клуб', club_path, class: 'text-base font-medium text-gray-500 hover:text-gray-900' %>
-        <%= link_to 'Прогноза', 'http://sealevel.site/', target: '_blank', class: 'text-base font-medium text-gray-500 hover:text-gray-900' %>
+        <%= link_to 'Прогноза', 'https://sealevel.site/', target: '_blank', class: 'text-base font-medium text-gray-500 hover:text-gray-900' %>
+        <%= link_to 'Дъски', 'https://euxine.blacksea.surf', target: '_blank', class: 'text-base font-medium text-gray-500 hover:text-gray-900' %>
         <!--
         <button id="dropdownHoverSurfboards" data-dropdown-toggle="dropdownSurfboards" data-dropdown-trigger="hover" class="text-gray-500 inline-flex items-center rounded-md bg-white text-base font-medium hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
           Surfboards
@@ -84,9 +85,10 @@
     <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
       <%= link_to 'Карта', root_path, class: 'block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50', data: { turbo: false }  %>
       <%= link_to 'Кодекс', codex_path, class: 'block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50' %>
-      <%= link_to 'Бутик', products_path, class: 'block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50' %>
+      <!-- <%= link_to 'Бутик', products_path, class: 'block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50' %> -->
       <%= link_to 'Клуб', club_path, class: 'block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50' %>
-      <%= link_to 'Прогноза', 'http://sealevel.site/', target: '_blank', class: 'block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50' %>
+      <%= link_to 'Прогноза', 'https://sealevel.site/', target: '_blank', rel: 'noopener noreferrer', class: 'block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50' %>
+      <%= link_to 'Дъски', 'https://euxine.blacksea.surf', target: '_blank', rel: 'noopener noreferrer', class: 'block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50' %>
     <!--<%= link_to 'Surfboards', '#', class: 'block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50' %>
       <%= link_to 'More', '#', class: 'block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50' %>
       <ul>
