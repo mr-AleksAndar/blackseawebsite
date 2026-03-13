@@ -40,6 +40,91 @@
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
     <%= javascript_include_tag "navbar", "data-turbo-track": "reload" %>
+
+    <!-- Google Translate Script & Logic -->
+    <script type="text/javascript">
+      function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+          pageLanguage: 'bg',
+          includedLanguages: 'en,bg',
+          autoDisplay: false
+        }, 'google_translate_element');
+      }
+
+      function getTranslateCookie() {
+        var name = "googtrans=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var ca = decodedCookie.split(';');
+        for(var i = 0; i <ca.length; i++) {
+          var c = ca[i].trim();
+          if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+        }
+        return "";
+      }
+
+      function setTranslateCookie(lang) {
+        var value = lang ? "/bg/" + lang : "";
+        var domain = window.location.hostname;
+        // Set for both the current domain and the base domain to be safe
+        document.cookie = "googtrans=" + value + "; path=/; SameSite=Lax";
+        // Also set for .domain to cover subdomains if any
+        document.cookie = "googtrans=" + value + "; path=/; domain=." + domain + "; SameSite=Lax";
+      }
+
+      function triggerTranslation() {
+        var current = getTranslateCookie();
+        var isEn = current.indexOf('/en') !== -1;
+        
+        if (isEn) {
+          setTranslateCookie(""); // Clear for Bulgarian
+        } else {
+          setTranslateCookie("en");
+        }
+        
+        // Reload is the only 100% reliable way to make Google Translate 
+        // re-scan the Turbo-replaced DOM and persist the state.
+        window.location.reload();
+      }
+
+      function updateFlagIcon() {
+        var current = getTranslateCookie();
+        var isEn = current.indexOf('/en') !== -1;
+        
+        document.querySelectorAll('.lang-flag-btn').forEach(function(btn) {
+          if (isEn) {
+            btn.textContent = '\uD83C\uDDE7\uD83C\uDDEC'; // BG flag
+            btn.setAttribute('title', '\u041f\u0440\u0435\u0432\u0435\u0434\u0438 \u043d\u0430 \u0411\u044a\u043b\u0433\u0430\u0440\u0441\u043a\u0438');
+          } else {
+            btn.textContent = '\uD83C\uDDEC\uD83C\uDDE7'; // EN flag
+            btn.setAttribute('title', 'Translate to English');
+          }
+        });
+      }
+
+      document.addEventListener('turbo:load', function() {
+        updateFlagIcon();
+        // If Google Translate bar appears, hide it again
+        var checkBar = setInterval(function() {
+          var bar = document.querySelector('.goog-te-banner-frame');
+          if (bar) {
+            bar.style.display = 'none';
+            document.body.style.top = '0px';
+          }
+        }, 500);
+        setTimeout(function() { clearInterval(checkBar); }, 5000);
+      });
+
+      window.addEventListener('load', updateFlagIcon);
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <style>
+      /* Hide Google UI trash */
+      #google_translate_element, .skiptranslate, .goog-te-banner-frame, #goog-gt-tt, .goog-te-balloon-frame { 
+        display: none !important; 
+      }
+      body { top: 0 !important; position: static !important; }
+      .goog-text-highlight { background: none !important; box-shadow: none !important; }
+    </style>
   </head>
 
   <body>
